@@ -6,23 +6,24 @@ public class App {
 
     static Scanner cin = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         getConnection();
         displayHomePage();
     }
 
-    public static void getConnection(){
+    public static Connection getConnection(){
 
         try {
             // Establish a connection
-            Connection connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
-            System.out.println("Connected to the database!");
+            return DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
+            //System.out.println("Connected to the database!");
         } catch (SQLException e) {
             System.out.println("Connection failed: " + e.getMessage());
+            return null;
         }
     }
 
-    public static void displayHomePage(){
+    public static void displayHomePage() throws SQLException {
         System.out.println("!!!WELCOME!!!");
         System.out.println("\n1.Admin Login\n2.Faculty Login\n3.TA Login\n4.Student Login\n5.EXIT");
         int c = cin.nextInt();

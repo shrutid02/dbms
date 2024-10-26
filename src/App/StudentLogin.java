@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class StudentLogin {
     static Scanner cin = new Scanner(System.in);
 
-    public static void displayStudentLoginPage() {
+    public static void displayStudentLoginPage() throws SQLException {
         System.out.println("Student Login Page");
         System.out.println("\n1.Sign-in\n2.Go Back");
         int choice = cin.nextInt();

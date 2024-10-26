@@ -1,12 +1,13 @@
 package App;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class AdminLogin {
 
     static Scanner cin = new Scanner(System.in);
 
-    public static void displayAdminLoginPage() {
+    public static void displayAdminLoginPage() throws SQLException {
 
         final String adminUsername = "admin";
         final String adminPassword = "password";

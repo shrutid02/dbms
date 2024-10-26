@@ -1,12 +1,13 @@
 package App;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
-public class TALogin {
+public class FacultyLogin {
     static Scanner cin = new Scanner(System.in);
 
-    public static void displayTALoginPage() {
-        System.out.println("TA Login Page");
+    public static void displayFacultyLoginPage() throws SQLException {
+        System.out.println("Faculty Login Page");
         System.out.println("\n1.Sign-in\n2.Go Back");
         int choice = cin.nextInt();
 
@@ -20,7 +21,7 @@ public class TALogin {
                 break;
             default:
                 System.out.println("Invalid choice. Please try again.");
-                displayTALoginPage();
+                displayFacultyLoginPage();
                 break;
         }
     }
