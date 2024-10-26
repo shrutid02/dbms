@@ -12,13 +12,10 @@ public class App {
     }
 
     public static void getConnection(){
-        final String DB_URL = "jdbc:mysql://127.0.0.1:3306/DBMSProject";
-        final String DB_USER = "root";
-        final String DB_PASSWORD = "Whiterose@59";
 
         try {
             // Establish a connection
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            Connection connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
             System.out.println("Connected to the database!");
         } catch (SQLException e) {
             System.out.println("Connection failed: " + e.getMessage());
