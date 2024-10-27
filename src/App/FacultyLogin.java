@@ -1,6 +1,6 @@
 package App;
 
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Scanner;
 
 public class FacultyLogin {
@@ -14,7 +14,16 @@ public class FacultyLogin {
         switch (choice) {
             case 1:
                 // Add sign-in logic here
-                System.out.println("Sign-in selected");
+                System.out.println("Enter your username: ");
+                String username = cin.next();
+                System.out.println("Enter your password: ");
+                String password = cin.next();
+                if (verifyFaculty(username, password)) {
+                    System.out.println("!!!WELCOME Faculty!!!");
+                } else {
+                    System.out.println("Invalid username or password. Please try again.");
+                    displayFacultyLoginPage();
+                }
                 break;
             case 2:
                 App.displayHomePage();
@@ -23,6 +32,21 @@ public class FacultyLogin {
                 System.out.println("Invalid choice. Please try again.");
                 displayFacultyLoginPage();
                 break;
+        }
+    }
+
+    public static boolean verifyFaculty(String username, String password) {
+
+        try (Connection connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD)) {
+            String query = "SELECT * FROM Faculty WHERE faculty_id = ? AND password = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+            return false;
         }
     }
 }
