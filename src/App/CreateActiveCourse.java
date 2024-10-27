@@ -1,9 +1,6 @@
 package App;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Scanner;
 
 public class CreateActiveCourse {
@@ -65,13 +62,14 @@ public class CreateActiveCourse {
                                    String faculty_id, Date start_date, Date end_date,
                                    String unique_token, int course_capacity) throws SQLException {
 
-        String sql = "INSERT INTO courses (course_id, course_name, textbook_id, course_type, faculty_id, ta_id, " +
-                "start_date, end_date, unique_token, course_capacity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "{ CALL AddNewCourse(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }"; //using Procedure AddNewCourse
+
+        //String sql = "INSERT INTO courses (course_id, course_name, textbook_id, course_type, faculty_id, ta_id, " + "start_date, end_date, unique_token, course_capacity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection connection = App.getConnection();
 
         try {
             assert connection != null;
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            try (CallableStatement stmt = connection.prepareCall(sql)) {
                 stmt.setString(1, course_id);
                 stmt.setString(2, course_name);
                 stmt.setInt(3, textbook_id);
@@ -85,7 +83,7 @@ public class CreateActiveCourse {
 
                 int rowsInserted = stmt.executeUpdate();
                 if (rowsInserted > 0) {
-                    System.out.println("New active course was created successfully!");
+                    System.out.println("New Active Course was created successfully!");
                     System.out.println("Going back to previous page... \n");
                 }
             }

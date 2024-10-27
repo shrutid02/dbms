@@ -1,9 +1,6 @@
 package App;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Scanner;
 
 public class CreateEvaluationCourse {
@@ -58,13 +55,12 @@ public class CreateEvaluationCourse {
     private static void saveCourse(String course_id, String course_name, int textbook_id,
                                    String faculty_id, Date start_date, Date end_date) throws SQLException {
 
-        String sql = "INSERT INTO courses (course_id, course_name, textbook_id, course_type, faculty_id, ta_id, " +
-                "start_date, end_date, unique_token, course_capacity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "{ CALL AddNewCourse(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }"; //using Procedure AddNewCourse
         Connection connection = App.getConnection();
 
         try {
             assert connection != null;
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            try (CallableStatement stmt = connection.prepareCall(sql)) {
                 stmt.setString(1, course_id);
                 stmt.setString(2, course_name);
                 stmt.setInt(3, textbook_id);
