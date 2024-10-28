@@ -20,7 +20,7 @@ public class FacultyLogin {
                 String password = cin.next();
                 if (verifyFaculty(username, password)) {
                     System.out.println("\n!!! WELCOME " + username + " !!!");
-                    FacultyLandingPage.displayFacultyLandingPage();
+                    FacultyLandingPage.displayFacultyLandingPage(username);
                 } else {
                     System.out.println("Invalid username or password. Please try again.");
                     displayFacultyLoginPage();
