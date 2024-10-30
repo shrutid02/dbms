@@ -1,6 +1,7 @@
 package App;
 
 import App.Faculty.FacultyAccount;
+import App.resource.Textbook;
 
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -19,7 +20,8 @@ public class AdminLandingPage {
                 FacultyAccount.create();
                 break;
             case 2:
-                System.out.println("Create E-Textbook selected");
+                System.out.println("Create E-Textbook");
+                Textbook.createTextbook();
                 break;
             case 3:
                 System.out.println("Modify E-Textbooks selected");
