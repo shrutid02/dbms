@@ -41,6 +41,9 @@ public class App {
             case 4:
                 StudentLogin.displayStudentLoginPage();
                 break;
+            case 5:
+                System.out.println("Thank you for using our platform!");
+                System.exit(0);
             default:
                 System.out.println("Invalid choice. Please try again.");
                 break;

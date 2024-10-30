@@ -1,5 +1,7 @@
 package App;
 
+import App.Faculty.FacultyAccount;
+
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -13,8 +15,8 @@ public class AdminLandingPage {
 
         switch (choice) {
             case 1:
-                // Add sign-in logic here
-                System.out.println("Create a Faculty Account selected");
+                System.out.println("Create a Faculty Account");
+                FacultyAccount.create();
                 break;
             case 2:
                 System.out.println("Create E-Textbook selected");
@@ -32,7 +34,7 @@ public class AdminLandingPage {
                 break;
             case 6:
                 System.out.println("You have logged out successfully.");
-                AdminLogin.displayAdminLoginPage();
+                App.displayHomePage();
                 break;
             default:
                 System.out.println("Invalid choice. Please try again.");
