@@ -1,4 +1,6 @@
-package App;
+package App.Faculty;
+
+import App.App;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -6,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class DisplayActiveCourseMenu {
+public class FacultyActiveCourseMenu {
     static Scanner cin = new Scanner(System.in);
 
     public static void displayActiveCourseMenu(String faculty_id, String course_id) throws SQLException {
@@ -17,7 +19,7 @@ public class DisplayActiveCourseMenu {
         System.out.println("4. Add New Chapter");
         System.out.println("5. Modify Chapters");
         System.out.println("6. Add TA");
-        System.out.println("7. Go Back");
+        System.out.println("7. Logout");
 
         int choice = cin.nextInt();
 
@@ -45,13 +47,12 @@ public class DisplayActiveCourseMenu {
                 displayActiveCourseMenu(faculty_id, course_id);
                 break;
             case 7:
-                System.out.println("Returning to Faculty Landing page...");
-                FacultyLandingPage.displayFacultyLandingPage(null);
+                System.out.println("Logging out...");
+                App.displayHomePage();
                 return;
             default:
                 System.out.println("Invalid choice. Please chose again.");
                 displayActiveCourseMenu(faculty_id, course_id);
-
         }
     }
 

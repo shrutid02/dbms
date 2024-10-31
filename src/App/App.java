@@ -1,4 +1,7 @@
 package App;
+
+import App.Faculty.FacultyLogin;
+
 import java.sql.*;
 import java.util.Scanner;
 
