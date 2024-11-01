@@ -9,16 +9,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `AddTA`(
 )
 BEGIN
     DECLARE v_ta_id CHAR(8);
-    DECLARE v_random_number CHAR(4);
-    
+    DECLARE current_month CHAR(2);
+    DECLARE current_year CHAR(2);
+
     -- Call the existing procedure to check if the course is active
     CALL CheckCourseType(p_course_id, @course_message);
 
     -- Check the message returned by CheckCourseType
     IF @course_message = 'Active course, you may continue.' THEN
         -- Generate TA_id
-        SET v_random_number = LPAD(FLOOR(RAND() * 10000), 4, '0');
-        SET v_ta_id = CONCAT(SUBSTRING(p_first_name, 1, 2), SUBSTRING(p_last_name, 1, 2), v_random_number);
+        SET current_month = DATE_FORMAT(CURDATE(), '%m');
+        SET current_year = DATE_FORMAT(CURDATE(), '%y');
+        SET v_ta_id = CONCAT(LEFT(p_first_name, 2), LEFT(p_last_name, 2), current_month, current_year);
 
         -- Insert the new TA into the TA table
         INSERT INTO TA (ta_id, first_name, last_name, email, password, course_id, faculty_id)

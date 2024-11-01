@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import static App.Faculty.FacultyLandingPage.displayFacultyLandingPage;
+
 public class FacultyActiveCourseMenu {
     static Scanner cin = new Scanner(System.in);
 
@@ -33,7 +35,7 @@ public class FacultyActiveCourseMenu {
                 displayActiveCourseMenu(faculty_id, course_id);
                 break;
             case 3:
-                viewStudents(course_id);
+                viewStudents(faculty_id, course_id);
                 displayActiveCourseMenu(faculty_id, course_id);
                 break;
             case 4:
@@ -128,38 +130,41 @@ public class FacultyActiveCourseMenu {
         //displayActiveCourseMenu();
     }
 
-    private static void viewStudents(String course_id) {
-        String sql = "{ CALL ViewStudents(?) }";  // Stored procedure call with one parameter
+    private static void viewStudents(String faculty_id, String course_id) throws SQLException {
+        String sql = "{ CALL GetStudentsByFacultyAndCourse(?, ?) }";  // Stored procedure call
         Connection connection = App.getConnection();
+
         try {
             assert connection != null;
             try (CallableStatement stmt = connection.prepareCall(sql)) {
-                stmt.setString(1, course_id);
+                stmt.setString(1, faculty_id);
+                stmt.setString(2, course_id);
+
                 ResultSet rs = stmt.executeQuery();
-                if (!rs.isBeforeFirst()) {
-                    System.out.println("\nNo students enrolled in Course ID " + course_id);
+
+                if (!rs.next()) {
+                    System.out.println("\nNo students found for Faculty ID: " + faculty_id + " in Course ID: " + course_id);
                 } else {
-                    System.out.println("\n*****************************************");
-                    System.out.println("  Students for Course " + course_id + " :");
-                    while (rs.next()) {
+                    System.out.println("\nStudents enrolled in Course ID '" + course_id + "' & taught by Faculty ID '" + faculty_id + "' :-");
+                    System.out.printf("%-15s %-25s\n", "Student ID", "Student Name");
+
+                    do {
                         String studentId = rs.getString("student_id");
-                        System.out.println("Student ID: " + studentId);
-                    }
-                    System.out.println("*****************************************");
+                        String studentName = rs.getString("full_name");
+                        System.out.printf("%-15s %-25s\n", studentId, studentName);
+                    } while (rs.next());
                 }
             }
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("\n1. Go back");
-            System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
-
-            if (choice == 1) {
-                System.out.println("Going back to the previous page...");
-            } else {
-                System.out.println("Invalid choice. Going back to the previous page by default.");
-            }
         } catch (SQLException e) {
-            System.out.println("Error retrieving students: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("\n1. Go Back");
+            Scanner scanner = new Scanner(System.in);
+            int choice = scanner.nextInt();
+            if (choice == 1) {
+                System.out.println("\nReturning to the previous page...");
+                displayFacultyLandingPage(faculty_id);
+            }
         }
     }
 

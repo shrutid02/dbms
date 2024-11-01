@@ -1,6 +1,7 @@
 package App;
 
 import App.Faculty.FacultyLogin;
+import App.TA.TALogin;
 
 import java.sql.*;
 import java.util.Scanner;
@@ -27,7 +28,7 @@ public class App {
     }
 
     public static void displayHomePage() throws SQLException {
-        System.out.println("!!!WELCOME!!!");
+        System.out.println("\n******** HOME ********");
         System.out.println("\n1.Admin Login\n2.Faculty Login\n3.TA Login\n4.Student Login\n5.EXIT");
         int c = cin.nextInt();
 

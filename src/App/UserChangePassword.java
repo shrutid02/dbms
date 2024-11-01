@@ -5,8 +5,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import static App.Faculty.FacultyLandingPage.displayFacultyLandingPage;
-
 public class UserChangePassword {
     static Scanner scanner = new Scanner(System.in);
 
@@ -29,9 +27,7 @@ public class UserChangePassword {
         if (choice == 1) {
             updatePasswordInDatabase(user_id, currentPassword, newPassword, role);
         }
-
         System.out.println("\nReturning to previous page...");
-        displayFacultyLandingPage(user_id);
     }
 
     private static void updatePasswordInDatabase(String user_id, String currentPassword, String newPassword, String role) {

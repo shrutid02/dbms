@@ -1,4 +1,7 @@
-package App;
+package App.TA;
+
+import App.App;
+import App.DatabaseConfig;
 
 import java.sql.*;
 import java.util.Scanner;
@@ -18,7 +21,8 @@ public class TALogin {
                 System.out.println("Enter your password: ");
                 String password = cin.next();
                 if (verifyTA(username, password)) {
-                    System.out.println("!!!WELCOME TA!!!");
+                    System.out.println("\n!!! WELCOME " + username + " !!!");
+                    TALandingPage.displayTALandingPage(username);
                 } else {
                     System.out.println("Invalid username or password. Please try again.");
                     displayTALoginPage();
