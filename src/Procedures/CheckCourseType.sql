@@ -1,45 +1,19 @@
-CREATE DEFINER=`root`@`localhost` PROCEDURE `ChangePassword`(
-    IN p_user_id VARCHAR(50),
-    IN p_current_password VARCHAR(255),
-    IN p_new_password VARCHAR(255),
-    IN p_role ENUM('Faculty', 'TA'),
-    OUT message VARCHAR(255)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CheckCourseType`(
+    IN p_course_id VARCHAR(50),
+    OUT p_message VARCHAR(50)
 )
 BEGIN
-    DECLARE v_password VARCHAR(255);
+    DECLARE v_course_type VARCHAR(50);
 
-    -- Conditional logic based on role
-    IF p_role = 'Faculty' THEN
-        -- Retrieve current password from Faculty table
-        SELECT password INTO v_password
-        FROM Faculty
-        WHERE faculty_id = p_user_id;
+    -- Check the course type in the courses table
+    SELECT course_type INTO v_course_type
+    FROM Courses
+    WHERE course_id = p_course_id;
 
-    ELSEIF p_role = 'TA' THEN
-        -- Retrieve current password from TA table
-        SELECT password INTO v_password
-        FROM TA
-        WHERE ta_id = p_user_id;
-
-    END IF;
-
-    -- Check if the user exists and the current password matches
-    IF v_password IS NULL THEN
-        SET message = 'User ID not found.';
-    ELSEIF v_password != p_current_password THEN
-        SET message = 'Error - Current password is incorrect.';
+    -- Set the output message based on the course type
+    IF v_course_type = 'Active' THEN
+        SET p_message = 'Active course, you may continue.';
     ELSE
-        -- Update the password in the respective table if current password is correct
-        IF p_role = 'Faculty' THEN
-            UPDATE Faculty
-            SET password = p_new_password
-            WHERE faculty_id = p_user_id;
-        ELSEIF p_role = 'TA' THEN
-            UPDATE TA
-            SET password = p_new_password
-            WHERE ta_id = p_user_id;
-        END IF;
-
-        SET message = 'Password updated successfully!!';
+        SET p_message = '\n****** Error: Please enter an active course_id.';
     END IF;
 END
