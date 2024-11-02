@@ -21,7 +21,7 @@ public class FacultyActiveCourseMenu {
         System.out.println("4. Add New Chapter");
         System.out.println("5. Modify Chapters");
         System.out.println("6. Add TA");
-        System.out.println("7. Logout");
+        System.out.println("7. Go Back");
 
         int choice = cin.nextInt();
 
@@ -49,8 +49,8 @@ public class FacultyActiveCourseMenu {
                 displayActiveCourseMenu(faculty_id, course_id);
                 break;
             case 7:
-                System.out.println("Logging out...");
-                App.displayHomePage();
+                System.out.println("Going back...");
+                displayFacultyLandingPage(faculty_id);
                 return;
             default:
                 System.out.println("Invalid choice. Please chose again.");
@@ -163,7 +163,7 @@ public class FacultyActiveCourseMenu {
             int choice = scanner.nextInt();
             if (choice == 1) {
                 System.out.println("\nReturning to the previous page...");
-                displayFacultyLandingPage(faculty_id);
+                displayActiveCourseMenu(faculty_id, course_id);
             }
         }
     }
