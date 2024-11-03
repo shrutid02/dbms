@@ -65,7 +65,7 @@ public class StudentEnrollment {
             connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
 
             // Prepare the callable statement
-            String sql = "{CALL CheckStudentAccountExists(?, ?)}";
+            String sql = "{CALL CheckStudentAccountExists(?, ?, ?)}";
             callableStatement = connection.prepareCall(sql);
 
             // Set the input parameter
@@ -73,16 +73,20 @@ public class StudentEnrollment {
 
             // Register the output parameter
             callableStatement.registerOutParameter(2, Types.BOOLEAN);
+            callableStatement.registerOutParameter(3, Types.CHAR);
+
 
             // Execute the procedure
             callableStatement.execute();
 
             // Get the output parameter
             boolean accountExists = callableStatement.getBoolean(2);
+            String existingStudentID = callableStatement.getString(3);
 
         // Print the status
             if (accountExists) {
                 System.out.println("Your student account already exists.");
+                studentID = existingStudentID;
                 verifyToken(studentID, courseToken);
             } else {
                 //System.out.println("Student account does not exist.");
@@ -171,14 +175,63 @@ public class StudentEnrollment {
             boolean tokenExists = callableStatement.getBoolean(2);
 
             // Print the status
+            String tempCourseToken = "";
             if (tokenExists) {
                 //System.out.println("Course token is valid.");
-                enrollStudentCourse(studentID, courseToken);
+                enrollmentExists(studentID, courseToken);
             } else {
                 System.out.println("Course token is invalid. Please try again.");
-                /*System.out.println("Enter Course Token: ");
-                courseToken = cin.next();
-                verifyToken(studentID, courseToken);*/
+                System.out.println("Enter Course Token: ");
+                tempCourseToken = cin.next();
+                verifyToken(studentID, tempCourseToken);
+            }
+        } 
+        catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        finally {
+            // Close the resources
+            try {
+                if (callableStatement != null) callableStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public static void enrollmentExists(String studentID, String courseToken){
+        Connection connection = null;
+        CallableStatement callableStatement = null;
+
+        try {
+            // Establish the connection
+            connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
+
+            // Prepare the callable statement
+            String sql = "{CALL CheckEnrollmentExists(?, ?, ?)}";
+            callableStatement = connection.prepareCall(sql);
+
+            // Set the input parameters
+            callableStatement.setString(1, studentID);
+            callableStatement.setString(2, courseToken);
+
+            // Register the output parameter
+            callableStatement.registerOutParameter(3, Types.BOOLEAN);
+
+            // Execute the procedure
+            callableStatement.execute();
+
+            // Get the output parameter
+            boolean enrollmentExists = callableStatement.getBoolean(3);
+
+            // Print the status
+            if (enrollmentExists) {
+                System.out.println("You are already enrolled in the course.");
+                enrollStudent();
+            } else {
+                enrollStudentCourse(studentID, courseToken);
             }
         } 
         catch (SQLException e) {
@@ -232,4 +285,6 @@ public class StudentEnrollment {
         }
 
     }
+
+    
 }
