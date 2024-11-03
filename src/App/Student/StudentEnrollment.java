@@ -1,10 +1,13 @@
-package App;
+package App.Student;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import App.DatabaseConfig;
+
 import java.sql.Types;
 
 public class StudentEnrollment {

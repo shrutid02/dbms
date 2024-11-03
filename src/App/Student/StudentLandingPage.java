@@ -1,8 +1,11 @@
-package App;
+package App.Student;
 
 import java.sql.*;
 
+
 import java.util.Scanner;
+
+import App.App;
 
 public class StudentLandingPage {
 
@@ -15,12 +18,13 @@ public class StudentLandingPage {
 
         switch (choice) {
             case 1:
-                System.out.println("Create a Faculty Account");
+                //System.out.println("View a section selected");
+                ViewSection.displayViewSectionPage(username);
 
                 break;
             case 2:
-                System.out.println("Create E-Textbook");
-
+                //System.out.println("View participation activity point selected");
+                ViewActivityPoint.displayActivityPoints(username);
                 break;
             case 3:
                 System.out.println("You have logged out successfully.");
