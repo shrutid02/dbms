@@ -25,6 +25,7 @@ public class AdminLandingPage {
                 break;
             case 3:
                 System.out.println("Modify E-Textbooks selected");
+                Textbook.modifyTextbook();
                 break;
             case 4:
                 System.out.println("Create a New Active Course selected");

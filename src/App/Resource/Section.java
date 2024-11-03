@@ -9,26 +9,26 @@ import java.util.Scanner;
 import static App.AdminLandingPage.displayAdminLandingPage;
 import static App.App.getConnection;
 
-public class Chapter {
+public class Section {
     static Scanner cin = new Scanner(System.in);
 
-    public static void addChapter(int textbook_id, Runnable caller) throws SQLException {
-        System.out.println("\nAdd New Chapter\n");
+    public static void createSection(int textbookId, String chapterId, Runnable caller) throws SQLException {
+        System.out.println("\nCreate Section\n");
 
-        System.out.println("A. Enter unique Chapter ID");
-        String chapter_id = cin.nextLine();
-        System.out.println("B. Enter Chapter title");
+        System.out.println("A. Enter Section Number");
+        String sectionId = cin.nextLine();
+        System.out.println("B. Enter Section Title");
         String title = cin.nextLine();
-        saveChapter(chapter_id,title, textbook_id, "no");
+        saveSection(textbookId, chapterId, sectionId,title);
 
-        System.out.println("\n1.Add New Section\n2.Go Back\n3.Landing Page");
+        System.out.println("\n1.Add New Content Block\n2.Go Back\n3.Landing Page");
         int choice = cin.nextInt();
 
         switch (choice) {
             case 1:
-                Section.createSection(textbook_id, chapter_id, () -> {
+                ContentBlock.newContentBlock(textbookId, chapterId, sectionId, () -> {
                     try {
-                        addChapter(textbook_id, caller);
+                        createSection(textbookId, chapterId, caller);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
@@ -46,60 +46,65 @@ public class Chapter {
         }
     }
 
-    private static void saveChapter(String chapter_id, String title, int textbook_id, String hidden) {
-        String sql = "INSERT INTO chapter (textbook_id, chapter_id, title, hidden) VALUES (?, ?, ?, ?)";
+    private static void saveSection(int textbookId, String chapterId, String sectionId, String title) {
+        String sql = "INSERT INTO sections (textbook_id, chapter_id, section_id, title, hidden) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, textbook_id);
-            preparedStatement.setString(2, chapter_id);
-            preparedStatement.setString(3, title);
-            preparedStatement.setString(4, hidden);
+            preparedStatement.setInt(1, textbookId);
+            preparedStatement.setString(2, chapterId);
+            preparedStatement.setString(3, sectionId);
+            preparedStatement.setString(4, title);
+            preparedStatement.setString(5, "no");
 
             int rowsInserted = preparedStatement.executeUpdate();
 
             if (rowsInserted > 0) {
-                System.out.println("New Chapter added successfully!");
+                System.out.printf("New section inserted in %d textbook, %s chapter successfully!%n", textbookId, chapterId);
             }
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
         }
     }
 
-    public static void modifyChapter(int textbook_id, Runnable caller) throws SQLException {
-        System.out.println("\nModify Chapter\n");
+    public static void modifySection(int textbookId, String chapterId, Runnable caller) throws SQLException {
+        System.out.println("\nModify Section\n");
 
-        System.out.println("A. Enter unique Chapter ID");
+        System.out.println("A. Enter unique Textbook ID");
+        int textbook_id = cin.nextInt();
+        cin.nextLine();
+        System.out.println("B. Enter Chapter ID");
         String chapter_id = cin.nextLine();
+        System.out.println("C. Enter Section Number");
+        String section_id = cin.nextLine();
 
-        if(!checkIfChapterExists(textbook_id, chapter_id)) {
-            System.out.println("Chapter not found! Going back...\n");
+        if(!checkIfSectionExists(textbook_id, chapter_id, section_id)) {
+            System.out.println("Section not found! Going back...\n");
             caller.run(); // go back to caller
         }
 
-        System.out.println("\n1.Add New Section\n2.Modify Section\n3.Go Back\n4.Landing Page");
+        System.out.println("\n1.Add New Content Block\n2.Modify Content Block\n3.Go Back\n4.Landing Page");
         int choice = cin.nextInt();
 
         switch (choice) {
             case 1:
-                Section.createSection(textbook_id, chapter_id, () -> {
+                ContentBlock.newContentBlock(textbook_id, chapter_id, section_id, () -> {
                     try {
-                        modifyChapter(textbook_id, caller);
+                        modifySection(textbookId, chapterId, caller);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                 });
                 break;
             case 2:
-                Section.modifySection(textbook_id, chapter_id, () -> {
+                ContentBlock.modifyContentBlock(textbook_id, chapter_id, section_id, () -> {
                     try {
-                        modifyChapter(textbook_id, caller);
+                        modifySection(textbookId, chapterId, caller);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                 });
-                break;
             case 3:
                 caller.run();
                 break;
@@ -112,14 +117,15 @@ public class Chapter {
         }
     }
 
-    private static boolean checkIfChapterExists(int textbook_id, String chapter_id) {
-        String sql = "SELECT * FROM chapter WHERE textbook_id = ? AND chapter_id = ?";
+    private static boolean checkIfSectionExists(int textbook_id, String chapter_id, String section_id) {
+        String sql = "SELECT * FROM sections WHERE textbook_id = ? AND chapter_id = ? AND section_id = ?";
 
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, textbook_id);
             preparedStatement.setString(2, chapter_id);
+            preparedStatement.setString(3, section_id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();

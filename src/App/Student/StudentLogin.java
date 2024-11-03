@@ -1,5 +1,7 @@
-package App;
+package App.Student;
 
+import App.App;
+import App.DatabaseConfig;
 import java.sql.*;
 import java.util.Scanner;
 
