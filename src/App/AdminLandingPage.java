@@ -1,7 +1,7 @@
 package App;
 
 import App.Faculty.FacultyAccount;
-import App.resource.Textbook;
+import App.Resource.Textbook;
 
 import java.sql.SQLException;
 import java.util.Scanner;

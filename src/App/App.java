@@ -29,7 +29,7 @@ public class App {
 
     public static void displayHomePage() throws SQLException {
         System.out.println("\n******** HOME ********");
-        System.out.println("\n1.Admin Login\n2.Faculty Login\n3.TA Login\n4.Student Login\n5.EXIT");
+        System.out.println("\n1.Admin Login\n2.Faculty Login\n3.TA Login\n4.Student Login\n5.Execute Queries\n6.EXIT");
         int c = cin.nextInt();
 
         switch (c) {
@@ -46,6 +46,9 @@ public class App {
                 StudentLogin.displayStudentLoginPage();
                 break;
             case 5:
+                ExecuteQueries.displayListOfQueries();
+                break;
+            case 6:
                 System.out.println("Thank you for using our platform!");
                 System.exit(0);
             default:

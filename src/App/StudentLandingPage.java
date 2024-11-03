@@ -1,8 +1,6 @@
 package App;
 
 import java.sql.*;
-import App.Faculty.FacultyAccount;
-import App.resource.Textbook;
 
 import java.util.Scanner;
 

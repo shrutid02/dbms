@@ -1,4 +1,4 @@
-package App.resource;
+package App.Resource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
