@@ -8,11 +8,14 @@ public class StudentLogin {
 
     public static void displayStudentLoginPage() throws SQLException {
         System.out.println("Student Login Page");
-        System.out.println("\n1.Sign-in\n2.Go Back");
+        System.out.println("\n1.Enroll in a course\n2.Sign-in\n3.Go Back");
         int choice = cin.nextInt();
 
         switch (choice) {
             case 1:
+                StudentEnrollment.enrollStudent();
+                break;
+            case 2:
                 // Add sign-in logic here
                 System.out.println("Enter your username: ");
                 String username = cin.next();
@@ -20,12 +23,13 @@ public class StudentLogin {
                 String password = cin.next();
                 if (verifyStudent(username, password)) {
                     System.out.println("Sign-in successful....");
+                    StudentLandingPage.displayStudentLandingPage(username);
                 } else {
                     System.out.println("Invalid username or password. Please try again.");
                     displayStudentLoginPage();
                 }
                 break;
-            case 2:
+            case 3:
                 App.displayHomePage();
                 break;
             default:
