@@ -1,9 +1,8 @@
 package App.Resource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import App.DatabaseConfig;
+
+import java.sql.*;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -46,8 +45,11 @@ public class Textbook {
 
     private static void saveTextbook(int id, String title) {
         String sql = "INSERT INTO textbook (textbook_id, title) VALUES (?, ?)";
+        Connection connection = null;
 
-        try (Connection connection = getConnection()) {
+        try {
+            connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
+
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, id);
@@ -107,8 +109,11 @@ public class Textbook {
 
     private static boolean checkIfTextbookExists(int id) {
         String sql = "SELECT * FROM textbook WHERE textbook_id = ?";
+        Connection connection = null;
 
-        try (Connection connection = getConnection()) {
+        try {
+            connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
+
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, Integer.parseInt(String.valueOf(id)));

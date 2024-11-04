@@ -1,6 +1,10 @@
 package App.Resource;
 
+import App.DatabaseConfig;
+
 import java.sql.Connection;
+import java.sql.CallableStatement;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -42,7 +46,10 @@ public class Activity {
      static void saveActivity(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, String hidden) {
         String sql = "INSERT INTO activity (textbook_id, chapter_id, section_id, block_id, unique_activity_id, hidden) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = getConnection()) {
+         Connection connection = null;
+
+        try {
+            connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, textbook_id);

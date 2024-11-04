@@ -1,9 +1,8 @@
 package App.Resource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import App.DatabaseConfig;
+
+import java.sql.*;
 import java.util.Scanner;
 
 import static App.AdminLandingPage.displayAdminLandingPage;
@@ -67,8 +66,10 @@ public class ContentBlock {
 
     private static void saveContentBlock(int textbook_id, String chapter_id, String section_id, String block_id, ContentType type, String content, String hidden) {
         String sql = "INSERT INTO blocks (textbook_id, chapter_id, section_number, block_id, type, content, hidden) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        Connection connection = null;
 
-        try (Connection connection = getConnection()) {
+        try {
+            connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, textbook_id);
@@ -140,8 +141,11 @@ public class ContentBlock {
 
     private static void updateContentBlock(int textbook_id, String chapter_id, String section_id, String block_id, ContentType type, String content, String hidden) {
         String sql = "UPDATE blocks SET type = ?, content = ?, hidden = ? WHERE textbook_id = ? AND chapter_id = ? AND section_id = ? AND block_id = ?";
+        Connection connection = null;
+        try {
 
-        try (Connection connection = getConnection()) {
+            connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
+
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set new values for the columns to be updated
@@ -169,8 +173,12 @@ public class ContentBlock {
 
     private static boolean checkIfContentBlockExists(int textbook_id, String chapter_id, String section_id, String block_id) {
         String sql = "SELECT * FROM blocks WHERE textbook_id = ? AND chapter_id = ? AND section_id = ? AND block_id = ?";
+        Connection connection = null;
 
-        try (Connection connection = getConnection()) {
+        try {
+
+            connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
+
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, textbook_id);

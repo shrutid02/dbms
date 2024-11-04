@@ -1,9 +1,8 @@
 package App.Resource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import App.DatabaseConfig;
+
+import java.sql.*;
 import java.util.Scanner;
 
 import static App.AdminLandingPage.displayAdminLandingPage;
@@ -49,7 +48,11 @@ public class Chapter {
     private static void saveChapter(String chapter_id, String title, int textbook_id, String hidden) {
         String sql = "INSERT INTO chapter (textbook_id, chapter_id, title, hidden) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = getConnection()) {
+        Connection connection;
+
+        try {
+
+            connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, textbook_id);
@@ -114,8 +117,12 @@ public class Chapter {
 
     private static boolean checkIfChapterExists(int textbook_id, String chapter_id) {
         String sql = "SELECT * FROM chapter WHERE textbook_id = ? AND chapter_id = ?";
+        Connection connection = null;
 
-        try (Connection connection = getConnection()) {
+        try {
+
+            connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
+
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, textbook_id);

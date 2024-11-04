@@ -1,6 +1,9 @@
 package App.Resource;
 
+import App.DatabaseConfig;
+
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -87,8 +90,10 @@ public class Question {
 
     private static void saveQuestion(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, String question_id, String questionText, Options[] options) {
         String sql = "INSERT INTO questions (textbook_id, chapter_id, section_id, block_id, unique_activity_id, question_id, question_text, option_1, opt_1_explanation, option_2, opt_2_explanation, option_3, opt_3_explanation, option_4, opt_4_explanation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection connection = null;
 
-        try (Connection connection = getConnection()) {
+        try {
+            connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, textbook_id);
