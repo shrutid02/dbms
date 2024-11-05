@@ -1,8 +1,43 @@
 package App;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class ListOfQueries {
+    public static void query1() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the textbook ID: \n");
+
+        int textbookId = scanner.nextInt();
+
+        String sql = "{CALL CountSectionsInFirstChapter(?)}";
+        Connection connection = App.getConnection();
+
+        try {
+            assert connection != null;
+            try (CallableStatement stmt = connection.prepareCall(sql)) {
+                // Set the input parameter
+                stmt.setInt(1, textbookId);
+
+                ResultSet resultSet = stmt.executeQuery();
+
+                System.out.println("\nOUTPUT:");
+                if (!resultSet.isBeforeFirst()) {
+                    System.out.println("**** No sections found ****");
+                } else {
+                    System.out.printf("Textbook ID: %d%n", textbookId);
+                    System.out.println("----------------------------------");
+
+                    while (resultSet.next()) {
+                        int sectionCount = resultSet.getInt("section_count");
+                        System.out.printf("Number of Sections in 'chap01': %d%n", sectionCount);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Database error: " + e.getMessage(), e);
+        }
+    }
 
     public static void query7() {
         String sql = "{CALL ListOfQueries7()}";
