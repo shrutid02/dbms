@@ -8,14 +8,23 @@ public class ExecuteQueries {
 
     public static void displayListOfQueries() throws SQLException {
         System.out.println("\n******** List of Queries: ********");
-        System.out.println("\n1.Print the number of sections of the first chapter of a textbook." +
-                "\n2.Print names of faculty and TAs of all courses." +
-                "\n3.For each active course, print the course id, faculty member and total number of students." +
-                "\n4.Find the course with the largest waiting list, print the course id and the total number of people on the list." +
-                "\n5.Print the contents of Chapter 02 of textbook 101 in proper sequence." +
-                "\n6.For Q2 of Activity0, print the incorrect answers for that question and their corresponding explanations." +
-                "\n7.Find any book that is in active status by one instructor but evaluation status by a different instructor." +
-                "\n8.EXIT");
+        System.out.println("""
+                
+                1.Print the number of sections of the first chapter of a textbook.\
+                
+                2.Print names of faculty and TAs of all courses.\
+                
+                3.For each active course, print the course id, faculty member and total number of students.\
+                
+                4.Find the course with the largest waiting list, print the course id and the total number of people on the list.\
+                
+                5.Print the contents of Chapter 02 of textbook 101 in proper sequence.\
+                
+                6.For Q2 of Activity0, print the incorrect answers for that question and their corresponding explanations.\
+                
+                7.Find any book that is in active status by one instructor but evaluation status by a different instructor.\
+                
+                8.EXIT""");
         System.out.println("\n*** Enter choice (1-8): ");
         int c = cin.nextInt();
 
@@ -25,6 +34,8 @@ public class ExecuteQueries {
             case 2:
                 break;
             case 3:
+                ListOfQueries.query3();
+                displayListOfQueries();
                 break;
             case 4:
                 break;
