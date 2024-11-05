@@ -1,6 +1,7 @@
 package App.TA;
 
 import App.App;
+import App.Resource.Chapter;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -28,10 +29,22 @@ public class TAActiveCourseMenu {
                 displayTALandingPage(ta_id);
                 break;
             case 2:
-                //addNewChapter(courseId, scanner);
+                Chapter.addChapter(course_id, () -> {
+                    try {
+                        displayActiveCourseMenu(ta_id, course_id);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
                 break;
             case 3:
-                //modifyChapters(courseId, scanner);
+                Chapter.TAModifyChapter(course_id, () -> {
+                    try {
+                        displayActiveCourseMenu(ta_id, course_id);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
                 break;
             case 4:
                 System.out.println("Going back to previous page...");

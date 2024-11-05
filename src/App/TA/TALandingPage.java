@@ -11,8 +11,10 @@ import java.util.Scanner;
 
 public class TALandingPage {
     static Scanner cin = new Scanner(System.in);
+    public static String gbTAId;
 
     public static void displayTALandingPage(String ta_id) throws SQLException {
+        gbTAId = ta_id;
         System.out.println("\n1. Go to Active Course\n2. View Courses\n3. Change Password\n4. Logout");
         int choice = cin.nextInt();
 

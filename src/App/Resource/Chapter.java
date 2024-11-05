@@ -24,7 +24,9 @@ public class Chapter {
         String title = cin.nextLine();
         saveChapter(chapter_id,title, textbook_id, "no");
 
-        System.out.println("\n1.Add New Section\n2.Go Back\n3.Landing Page");
+        System.out.println("\n1.Add New Section\n2.Go Back");
+        if(!caller.toString().contains("TA") && !caller.toString().contains("Faculty")) System.out.println("3.Landing Page");
+
         int choice = cin.nextInt();
 
         switch (choice) {
@@ -70,6 +72,7 @@ public class Chapter {
                 System.out.println("New Chapter added successfully!");
             }
         } catch (SQLException e) {
+            System.out.println("Failure");
             System.out.println("Database error: " + e.getMessage());
         }
     }
@@ -154,6 +157,52 @@ public class Chapter {
                 Section.modifySection(textbook_id, chapter_id, () -> {
                     try {
                         modifyChapter(textbook_id, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 3:
+                caller.run();
+                break;
+            case 4:
+                displayAdminLandingPage();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
+    public static void TAModifyChapter(String courseId, Runnable caller) throws SQLException {
+        int textbook_id = getTextbookIdForCourse(courseId);
+        System.out.println("\nModify Chapter\n");
+
+        System.out.println("A. Enter unique Chapter ID");
+        String chapter_id = cin.nextLine();
+
+        if(!checkIfChapterExists(textbook_id, chapter_id)) {
+            System.out.println("Chapter not found! Going back...\n");
+            caller.run(); // go back to caller
+        }
+
+        System.out.println("\n1.Add New Section\n2.Modify Section\n3.Go Back\n4.Landing Page");
+        int choice = cin.nextInt();
+
+        switch (choice) {
+            case 1:
+                Section.createSection(textbook_id, chapter_id, () -> {
+                    try {
+                        TAModifyChapter(courseId, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 2:
+                Section.TAModifySection(textbook_id, chapter_id, () -> {
+                    try {
+                        TAModifyChapter(courseId, caller);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }

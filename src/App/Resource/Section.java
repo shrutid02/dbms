@@ -21,6 +21,8 @@ public class Section {
         saveSection(textbookId, chapterId, sectionId,title);
 
         System.out.println("\n1.Add New Content Block\n2.Go Back\n3.Landing Page");
+        if(!caller.toString().contains("TA") && !caller.toString().contains("Faculty")) System.out.println("4.Landing Page");
+
         int choice = cin.nextInt();
 
         switch (choice) {
@@ -160,6 +162,63 @@ public class Section {
                         throw new RuntimeException(e);
                     }
                 });
+            case 5:
+                caller.run();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
+    public static void TAModifySection(int textbook_id, String chapter_id, Runnable caller) throws SQLException {
+        System.out.println("\nModify Section\n");
+
+//        System.out.println("A. Enter unique Textbook ID");
+//        int textbook_id = cin.nextInt();
+//        cin.nextLine();
+        System.out.println("C. Enter Section Number");
+        String section_id = cin.nextLine();
+//        System.out.println("B. Enter Section Title");
+//        String chapter_id = cin.nextLine();
+//        System.out.println("C. Enter Chapter ID");
+//        String chapter_id = cin.nextLine();
+//        System.out.println("C. Enter Book");
+//        int textbook_id1 = cin.nextInt();
+//        cin.nextLine();
+
+        if(!checkIfSectionExists(textbook_id, chapter_id, section_id)) {
+            System.out.println("Section not found! Going back...\n");
+            caller.run();
+        }
+
+        System.out.println("\n1.Add New Content Block\n2.Modify Content Block\n3.Delete Content Block\n4.Hide Content Block\n5.Go Back");
+        int choice = cin.nextInt();
+
+        switch (choice) {
+            case 1:
+                ContentBlock.newContentBlock(textbook_id, chapter_id, section_id, () -> {
+                    try {
+                        TAModifySection(textbook_id, chapter_id, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 2:
+                ContentBlock.modifyContentBlock(textbook_id, chapter_id, section_id, () -> {
+                    try {
+                        TAModifySection(textbook_id, chapter_id, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            case 3:
+                caller.run();
+                break;
+            case 4:
+                caller.run();
+                break;
             case 5:
                 caller.run();
                 break;
