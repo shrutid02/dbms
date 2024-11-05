@@ -1,6 +1,7 @@
 package App.Faculty;
 
 import App.App;
+import App.Resource.Chapter;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -39,14 +40,27 @@ public class FacultyActiveCourseMenu {
                 displayActiveCourseMenu(faculty_id, course_id);
                 break;
             case 4:
-                //addNewChapter(courseId, scanner);
+                Chapter.addChapter(course_id,() -> {
+                    try {
+                        displayActiveCourseMenu(faculty_id,course_id);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                displayActiveCourseMenu(faculty_id, course_id);
                 break;
             case 5:
-                //modifyChapters(courseId, scanner);
+                Chapter.facultyModifyChapter(course_id,() -> {
+                    try {
+                        displayActiveCourseMenu(faculty_id,course_id);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                displayActiveCourseMenu(faculty_id, course_id);
                 break;
             case 6:
                 addTA(course_id, faculty_id);
-                displayActiveCourseMenu(faculty_id, course_id);
                 break;
             case 7:
                 System.out.println("Going back...");
@@ -203,4 +217,6 @@ public class FacultyActiveCourseMenu {
             System.out.println(e.getMessage());
         }
     }
+
+
 }

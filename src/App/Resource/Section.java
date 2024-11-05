@@ -84,7 +84,7 @@ public class Section {
 
         if(!checkIfSectionExists(textbook_id, chapter_id, section_id)) {
             System.out.println("Section not found! Going back...\n");
-            caller.run(); // go back to caller
+            caller.run();
         }
 
         System.out.println("\n1.Add New Content Block\n2.Modify Content Block\n3.Go Back\n4.Landing Page");
@@ -112,7 +112,56 @@ public class Section {
                 caller.run();
                 break;
             case 4:
-                displayAdminLandingPage();
+                caller.run();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
+    public static void facultyModifySection(int textbook_id, String chapter_id, Runnable caller) throws SQLException {
+        System.out.println("\nModify Section\n");
+        ;
+        System.out.println("C. Enter Section Number");
+        String section_id = cin.nextLine();
+
+        if(!checkIfSectionExists(textbook_id, chapter_id, section_id)) {
+            System.out.println("Section not found! Going back...\n");
+            caller.run();
+        }
+
+        System.out.println("\n1.Hide section \n2.Delete Section \n3.Add New Content Block\n4.Modify Content Block\n5.Go Back");
+        int choice = cin.nextInt();
+
+        switch (choice) {
+            case 1:
+                hideSection(textbook_id,chapter_id,section_id);
+                facultyModifySection(textbook_id,chapter_id,caller);
+                break;
+            case 2:
+                deleteSection(textbook_id,chapter_id,section_id);
+                facultyModifySection(textbook_id,chapter_id,caller);
+                break;
+            case 3:
+                ContentBlock.newContentBlock(textbook_id, chapter_id, section_id, () -> {
+                    try {
+                        modifySection(textbook_id, chapter_id, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 4:
+                ContentBlock.modifyContentBlock(textbook_id, chapter_id, section_id, () -> {
+                    try {
+                        modifySection(textbook_id, chapter_id, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            case 5:
+                caller.run();
                 break;
             default:
                 System.out.println("Invalid choice. Please try again.");
@@ -137,6 +186,62 @@ public class Section {
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
             return false;
+        }
+    }
+
+    private static void hideSection(int textbook_id, String chapter_id, String section_number){
+        System.out.println("\nHide Section?\n");
+        System.out.println("\n1.Save \n2.Cancel");
+        int choice = cin.nextInt();
+
+        if(choice == 2) return;
+
+        String sql = "UPDATE sections SET hidden = 'yes' WHERE chapter_id = ? AND textbook_id = ? AND section_id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, chapter_id);
+            preparedStatement.setInt(2, textbook_id);
+            preparedStatement.setString(3, section_number);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Section successfully hidden.");
+            } else {
+                System.out.println("No matching section found to update.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+    }
+
+    private static void deleteSection(int textbook_id, String chapter_id, String section_number){
+        System.out.println("\nDelete Section?\n");
+        System.out.println("\n1.Save \n2.Cancel");
+        int choice = cin.nextInt();
+
+        if(choice == 2) return;
+
+        String sql = "DELETE FROM sections WHERE chapter_id = ? AND textbook_id = ? AND section_id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, chapter_id);
+            preparedStatement.setInt(2, textbook_id);
+            preparedStatement.setString(3, section_number);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Section successfully deleted.");
+            } else {
+                System.out.println("No matching section found to update.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
         }
     }
 }

@@ -1,5 +1,7 @@
 package App.Faculty;
 
+import App.Resource.Chapter;
+
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -16,10 +18,24 @@ public class FacultyEvaluationCourseMenu {
 
         switch (choice) {
             case 1:
-                //addNewChapter(courseId, scanner);
+                Chapter.addChapter(course_id,() -> {
+                    try {
+                        displayEvaluationCourseMenu(faculty_id,course_id);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                displayEvaluationCourseMenu(faculty_id,course_id);
                 break;
             case 2:
-                //modifyChapters(courseId, scanner);
+                Chapter.facultyModifyChapter(course_id,() -> {
+                    try {
+                        displayEvaluationCourseMenu(faculty_id,course_id);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                displayEvaluationCourseMenu(faculty_id,course_id);
                 break;
             case 3:
                 System.out.println("Returning to Faculty Landing page...");

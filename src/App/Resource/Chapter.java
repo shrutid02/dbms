@@ -11,6 +11,10 @@ import static App.App.getConnection;
 public class Chapter {
     static Scanner cin = new Scanner(System.in);
 
+    public static void addChapter(String courseId, Runnable caller) throws SQLException {
+        addChapter(getTextbookIdForCourse(courseId),caller);
+    }
+
     public static void addChapter(int textbook_id, Runnable caller) throws SQLException {
         System.out.println("\nAdd New Chapter\n");
 
@@ -67,6 +71,58 @@ public class Chapter {
             }
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
+        }
+    }
+
+    public static void facultyModifyChapter(String courseId, Runnable caller) throws SQLException {
+        int textbook_id = getTextbookIdForCourse(courseId);
+        System.out.println("\nModify Chapter\n");
+
+        System.out.println("A. Enter unique Chapter ID");
+        String chapter_id = cin.nextLine();
+
+        if (!checkIfChapterExists(textbook_id, chapter_id)) {
+            System.out.println("Chapter not found! Going back...\n");
+            caller.run(); // go back to caller
+        }
+
+        System.out.println("\n1. Hide Chapter \n2. Delete Chapter \n3.Add New Section\n4.Modify Section\n5.Go Back");
+        int choice = cin.nextInt();
+
+        switch (choice) {
+            case 1:
+                hideChapter(textbook_id, chapter_id);
+                caller.run();
+                break;
+            case 2:
+                deleteChapter(chapter_id, textbook_id);
+                caller.run();
+                break;
+            case 3:
+                Section.createSection(textbook_id, chapter_id, () -> {
+                    try {
+                        facultyModifyChapter(courseId, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 4:
+                Section.facultyModifySection(textbook_id, chapter_id, () -> {
+                    try {
+                        facultyModifyChapter(courseId, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 5:
+                caller.run();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+
         }
     }
 
@@ -133,6 +189,77 @@ public class Chapter {
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
             return false;
+        }
+    }
+
+    private static int getTextbookIdForCourse(String course) throws SQLException {
+        String sql = "SELECT * FROM courses WHERE course_id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, course);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("textbook_id");
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    private static void hideChapter(int textbook_id, String chapter_id){
+        System.out.println("\nHide Chapter?\n");
+        System.out.println("\n1.Save \n2.Cancel");
+        int choice = cin.nextInt();
+
+        if(choice == 2) return;
+
+        String sql = "UPDATE chapter SET hidden = 'yes' WHERE chapter_id = ? AND textbook_id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, chapter_id);
+            preparedStatement.setInt(2, textbook_id);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Chapter successfully hidden.");
+            } else {
+                System.out.println("No matching chapter found to update.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+    }
+
+    private static void deleteChapter(String chapterId, int textbookId) {
+        System.out.println("\nDelete Chapter?\n");
+        System.out.println("\n1.Save \n2.Cancel");
+        int choice = cin.nextInt();
+
+        if(choice == 2) return;
+
+        String sql = "DELETE FROM chapter WHERE chapter_id = ? AND textbook_id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, chapterId);
+            preparedStatement.setInt(2, textbookId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Chapter successfully deleted.");
+            } else {
+                System.out.println("No matching chapter found to delete.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
         }
     }
 }
