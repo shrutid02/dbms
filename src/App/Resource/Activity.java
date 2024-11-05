@@ -68,4 +68,52 @@ public class Activity {
             System.out.println("Database error: " + e.getMessage());
         }
     }
+
+    public static void hideActivity(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id) {
+        String sql = "UPDATE Activity SET hidden = 'yes' WHERE textbook_id = ? AND chapter_id = ? AND section_id = ? AND block_id = ? AND unique_activity_id = ?";
+
+        try (Connection connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, textbook_id);
+            preparedStatement.setString(2, chapter_id);
+            preparedStatement.setString(3, section_id);
+            preparedStatement.setString(4, block_id);
+            preparedStatement.setString(5, unique_activity_id);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Activity successfully hidden.");
+            } else {
+                System.out.println("No matching activity found to hide.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+    }
+
+    public static void deleteActivity(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id) {
+        String sql = "DELETE FROM Activity WHERE textbook_id = ? AND chapter_id = ? AND section_id = ? AND block_id = ? AND unique_activity_id = ?";
+
+        try (Connection connection = DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, textbook_id);
+            preparedStatement.setString(2, chapter_id);
+            preparedStatement.setString(3, section_id);
+            preparedStatement.setString(4, block_id);
+            preparedStatement.setString(5, unique_activity_id);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Activity successfully deleted.");
+            } else {
+                System.out.println("No matching activity found to delete.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+    }
 }

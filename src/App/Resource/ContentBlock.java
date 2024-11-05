@@ -139,8 +139,92 @@ public class ContentBlock {
         }
     }
 
+    public static void facultyModifyContentBlock(int textbook_id, String chapter_id, String section_id, Runnable caller) throws SQLException {
+        cin = new Scanner(System.in);
+        System.out.println("\nModify Content Block\n");
+
+        System.out.println("A. Content Block ID");
+        String blockId = cin.nextLine();
+
+        if(!checkIfContentBlockExists(textbook_id, chapter_id, section_id, blockId)) {
+            System.out.println("Section not found! Going back...\n");
+            caller.run();
+        }
+
+        System.out.println("\n1.Hide Content Block \n2. Delete Content Block \n3.Add Text\n4.Add Picture \n5.Hide Activity \n6. Delete Activity \n7.Add Activity\n8.Go Back");
+        int choice = cin.nextInt();
+        cin = new Scanner(System.in);
+
+        switch (choice) {
+            case 1:
+                hideContentBlock(textbook_id,chapter_id,section_id,blockId);
+                caller.run();
+                break;
+            case 2:
+                deleteContentBlock(textbook_id,chapter_id,section_id,blockId);
+                caller.run();
+            case 3:
+                System.out.println("A. Enter Text");
+                String text = cin.nextLine();
+
+                System.out.println("\n1. Add \n2. Go Back");
+                choice = cin.nextInt();
+
+                if(choice == 2) caller.run();
+                else updateContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, text, "no");
+                break;
+            case 4:
+                System.out.println("Enter Picture");
+                String picture = cin.nextLine();
+
+                System.out.println("\n1. Add \n2. Go Back");
+                choice = cin.nextInt();
+
+                if(choice == 1) updateContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.picture, picture, "no");
+                caller.run();
+                break;
+            case 5:
+                System.out.println("Enter unique activity ID");
+                String unique_activity_id = cin.nextLine();
+
+                System.out.println("\n1. Save \n2. Cancel");
+                choice = cin.nextInt();
+
+                if(choice == 1) Activity.hideActivity(textbook_id,chapter_id,section_id,blockId,unique_activity_id);
+                caller.run();
+                break;
+            case 6:
+                System.out.println("Enter unique activity ID");
+                unique_activity_id = cin.nextLine();
+
+                System.out.println("\n1. Save \n2. Cancel");
+                choice = cin.nextInt();
+
+                if(choice == 1) Activity.deleteActivity(textbook_id,chapter_id,section_id,blockId,unique_activity_id);
+                caller.run();
+                break;
+            case 7:
+                System.out.println("Enter Activity ID");
+                String activity_id = cin.nextLine();
+                Activity.createActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
+                    try {
+                        newContentBlock(textbook_id, chapter_id, section_id, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                updateContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.picture, activity_id, "no");
+                break;
+            case 8:
+                caller.run();
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
     private static void updateContentBlock(int textbook_id, String chapter_id, String section_id, String block_id, ContentType type, String content, String hidden) {
-        String sql = "UPDATE blocks SET type = ?, content = ?, hidden = ? WHERE textbook_id = ? AND chapter_id = ? AND section_id = ? AND block_id = ?";
+        String sql = "UPDATE blocks SET type = ?, content = ?, hidden = ? WHERE textbook_id = ? AND chapter_id = ? AND section_number = ? AND block_id = ?";
         Connection connection = null;
         try {
 
@@ -172,7 +256,7 @@ public class ContentBlock {
     }
 
     private static boolean checkIfContentBlockExists(int textbook_id, String chapter_id, String section_id, String block_id) {
-        String sql = "SELECT * FROM blocks WHERE textbook_id = ? AND chapter_id = ? AND section_id = ? AND block_id = ?";
+        String sql = "SELECT * FROM blocks WHERE textbook_id = ? AND chapter_id = ? AND section_number = ? AND block_id = ?";
         Connection connection = null;
 
         try {
@@ -191,6 +275,64 @@ public class ContentBlock {
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
             return false;
+        }
+    }
+
+    private static void hideContentBlock(int textbook_id, String chapter_id, String section_id, String block_id){
+        System.out.println("\nHide Content Block?\n");
+        System.out.println("\n1.Save \n2.Cancel");
+        int choice = cin.nextInt();
+
+        if(choice == 2) return;
+
+        String sql = "UPDATE blocks SET hidden = 'yes' WHERE textbook_id = ? AND chapter_id = ? AND section_number = ? AND block_id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, textbook_id);
+            preparedStatement.setString(2, chapter_id);
+            preparedStatement.setString(3, section_id);
+            preparedStatement.setString(4, block_id);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Block successfully hidden.");
+            } else {
+                System.out.println("No matching block found to update.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+    }
+
+    private static void deleteContentBlock(int textbook_id, String chapter_id, String section_id, String block_id){
+        System.out.println("\nDelete Content Block?\n");
+        System.out.println("\n1. Confirm Delete \n2. Cancel");
+        int choice = cin.nextInt();
+
+        if (choice == 2) return;
+
+        String sql = "DELETE FROM blocks WHERE textbook_id = ? AND chapter_id = ? AND section_number = ? AND block_id = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, textbook_id);
+            preparedStatement.setString(2, chapter_id);
+            preparedStatement.setString(3, section_id);
+            preparedStatement.setString(4, block_id);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Content block successfully deleted.");
+            } else {
+                System.out.println("No matching content block found to delete.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
         }
     }
 }
