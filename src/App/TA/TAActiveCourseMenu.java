@@ -29,7 +29,7 @@ public class TAActiveCourseMenu {
                 displayTALandingPage(ta_id);
                 break;
             case 2:
-                Chapter.addChapter(course_id, () -> {
+                Chapter.TAAddChapter(course_id, () -> {
                     try {
                         displayActiveCourseMenu(ta_id, course_id);
                     } catch (SQLException e) {

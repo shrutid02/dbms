@@ -22,7 +22,7 @@ public class Chapter {
         String chapter_id = cin.nextLine();
         System.out.println("B. Enter Chapter title");
         String title = cin.nextLine();
-        saveChapter(chapter_id,title, textbook_id, "no");
+        saveChapter(chapter_id, title, textbook_id, "no");
 
         System.out.println("\n1.Add New Section\n2.Go Back");
         if(!caller.toString().contains("TA") && !caller.toString().contains("Faculty")) System.out.println("3.Landing Page");
@@ -50,6 +50,43 @@ public class Chapter {
                 break;
         }
     }
+
+    public static void TAAddChapter(String courseId, Runnable caller) throws SQLException {
+        int textbook_id = getTextbookIdForCourse(courseId);
+        System.out.println("\nAdd New Chapter\n");
+
+        System.out.println("A. Enter unique Chapter ID");
+        String chapter_id = cin.nextLine();
+        System.out.println("B. Enter Chapter title");
+        String title = cin.nextLine();
+        saveChapter(chapter_id, title, textbook_id, "no");
+
+        System.out.println("\n1.Add New Section\n2.Go Back");
+
+        int choice = cin.nextInt();
+
+        switch (choice) {
+            case 1:
+                Section.TACreateSection(textbook_id, chapter_id, () -> {
+                    try {
+                        TAAddChapter(courseId, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 2:
+                caller.run();
+                break;
+            case 3:
+                displayAdminLandingPage();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
 
     private static void saveChapter(String chapter_id, String title, int textbook_id, String hidden) {
         String sql = "INSERT INTO chapter (textbook_id, chapter_id, title, hidden) VALUES (?, ?, ?, ?)";
@@ -186,12 +223,12 @@ public class Chapter {
             caller.run(); // go back to caller
         }
 
-        System.out.println("\n1.Add New Section\n2.Modify Section\n3.Go Back\n4.Landing Page");
+        System.out.println("\n1.Add New Section\n2.Modify Section\n3.Go Back");
         int choice = cin.nextInt();
 
         switch (choice) {
             case 1:
-                Section.createSection(textbook_id, chapter_id, () -> {
+                Section.TACreateSection(textbook_id, chapter_id, () -> {
                     try {
                         TAModifyChapter(courseId, caller);
                     } catch (SQLException e) {
@@ -210,9 +247,6 @@ public class Chapter {
                 break;
             case 3:
                 caller.run();
-                break;
-            case 4:
-                displayAdminLandingPage();
                 break;
             default:
                 System.out.println("Invalid choice. Please try again.");

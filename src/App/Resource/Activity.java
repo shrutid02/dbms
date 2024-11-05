@@ -43,6 +43,31 @@ public class Activity {
         }
     }
 
+    public static void TACreateActivity(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, Runnable caller) throws SQLException {
+
+        System.out.println("\n1.Add Question\n2.Go Back");
+        int choice = cin.nextInt();
+        cin.nextLine();
+
+        switch (choice) {
+            case 1:
+                Question.facultyTACreateQuestion(textbook_id, chapter_id, section_id, block_id, unique_activity_id, () -> {
+                    try {
+                        TACreateActivity(textbook_id, chapter_id, section_id, block_id, unique_activity_id, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 2:
+                caller.run();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
      static void saveActivity(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, String hidden) {
         String sql = "INSERT INTO activity (textbook_id, chapter_id, section_id, block_id, unique_activity_id, hidden) VALUES (?, ?, ?, ?, ?, ?)";
 

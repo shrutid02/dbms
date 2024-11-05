@@ -47,6 +47,38 @@ public class Section {
         }
     }
 
+    public static void TACreateSection(int textbookId, String chapterId, Runnable caller) throws SQLException {
+        System.out.println("\nCreate Section\n");
+
+        System.out.println("A. Enter Section Number");
+        String sectionId = cin.nextLine();
+        System.out.println("B. Enter Section Title");
+        String title = cin.nextLine();
+        saveSection(textbookId, chapterId, sectionId,title);
+
+        System.out.println("\n1.Add New Content Block\n2.Go Back");
+
+        int choice = cin.nextInt();
+
+        switch (choice) {
+            case 1:
+                ContentBlock.TANewContentBlock(textbookId, chapterId, sectionId, () -> {
+                    try {
+                        TACreateSection(textbookId, chapterId, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 2:
+                caller.run();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
     private static void saveSection(int textbookId, String chapterId, String sectionId, String title) {
         String sql = "INSERT INTO sections (textbook_id, chapter_id, section_id, title, hidden) VALUES (?, ?, ?, ?, ?)";
         Connection connection = null;
@@ -198,7 +230,7 @@ public class Section {
 
         switch (choice) {
             case 1:
-                ContentBlock.newContentBlock(textbook_id, chapter_id, section_id, () -> {
+                ContentBlock.TANewContentBlock(textbook_id, chapter_id, section_id, () -> {
                     try {
                         TAModifySection(textbook_id, chapter_id, caller);
                     } catch (SQLException e) {
@@ -215,10 +247,14 @@ public class Section {
                     }
                 });
             case 3:
-                caller.run();
+                System.out.println("A. Content Block ID");
+                String delete_block_id = cin.nextLine();
+                ContentBlock.deleteContentBlock(textbook_id, chapter_id, section_id, delete_block_id);
                 break;
             case 4:
-                caller.run();
+                System.out.println("A. Content Block ID");
+                String hide_block_id = cin.nextLine();
+                ContentBlock.hideContentBlock(textbook_id, chapter_id, section_id, hide_block_id);
                 break;
             case 5:
                 caller.run();

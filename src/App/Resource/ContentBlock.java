@@ -63,10 +63,12 @@ public class ContentBlock {
                     case 3:
                         displayAdminLandingPage();
                         break;
-                }                break;
+                }
+                break;
             case 3:
                 System.out.println("Enter Activity ID");
                 String activity_id = cin.nextLine();
+                saveContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.activity, activity_id, "no");
                 Activity.saveActivity(textbook_id, chapter_id, section_id, blockId, activity_id, "no");
                 Activity.createActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
                     try {
@@ -75,7 +77,6 @@ public class ContentBlock {
                         throw new RuntimeException(e);
                     }
                 });
-                saveContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.activity, activity_id, "no");
                 break;
             case 4:
                 caller.run();
@@ -135,23 +136,23 @@ public class ContentBlock {
                 }
                 break;
             case 3:
-                System.out.println("Enter Activity ID");
+                System.out.println("Enter Unique Activity ID");
                 String activity_id = cin.nextLine();
+                saveContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.activity, activity_id, "no");
                 Activity.saveActivity(textbook_id, chapter_id, section_id, blockId, activity_id, "no");
-                Activity.createActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
+                Activity.TACreateActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
                     try {
                         TANewContentBlock(textbook_id, chapter_id, section_id, caller);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                 });
-                saveContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.activity, activity_id, "no");
                 break;
             case 4:
                 System.out.println("Enter Activity ID");
                 String hide_activity_id = cin.nextLine();
-                //Activity.hideActivity(textbook_id, chapter_id, section_id, blockId, hide_activity_id, "yes");
                 saveContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.activity, hide_activity_id, "no");
+                Activity.hideActivity(textbook_id, chapter_id, section_id, blockId, hide_activity_id);
                 break;
             case 5:
                 caller.run();
@@ -216,6 +217,7 @@ public class ContentBlock {
             case 3:
                 System.out.println("Enter Activity ID");
                 String activity_id = cin.nextLine();
+                updateContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.picture, activity_id, "no");
                 Activity.createActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
                     try {
                         newContentBlock(textbook_id, chapter_id, section_id, caller);
@@ -223,7 +225,6 @@ public class ContentBlock {
                         throw new RuntimeException(e);
                     }
                 });
-                updateContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.picture, activity_id, "no");
                 break;
             case 4:
                 caller.run();
@@ -305,6 +306,7 @@ public class ContentBlock {
             case 7:
                 System.out.println("Enter Activity ID");
                 String activity_id = cin.nextLine();
+                updateContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.picture, activity_id, "no");
                 Activity.createActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
                     try {
                         newContentBlock(textbook_id, chapter_id, section_id, caller);
@@ -312,7 +314,6 @@ public class ContentBlock {
                         throw new RuntimeException(e);
                     }
                 });
-                updateContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.picture, activity_id, "no");
                 break;
             case 8:
                 caller.run();
@@ -377,7 +378,7 @@ public class ContentBlock {
         }
     }
 
-    private static void hideContentBlock(int textbook_id, String chapter_id, String section_id, String block_id){
+     static void hideContentBlock(int textbook_id, String chapter_id, String section_id, String block_id){
         System.out.println("\nHide Content Block?\n");
         System.out.println("\n1.Save \n2.Cancel");
         int choice = cin.nextInt();
@@ -406,7 +407,7 @@ public class ContentBlock {
         }
     }
 
-    private static void deleteContentBlock(int textbook_id, String chapter_id, String section_id, String block_id){
+    static void deleteContentBlock(int textbook_id, String chapter_id, String section_id, String block_id){
         System.out.println("\nDelete Content Block?\n");
         System.out.println("\n1. Confirm Delete \n2. Cancel");
         int choice = cin.nextInt();

@@ -88,7 +88,7 @@ public class Question {
         }
     }
 
-    public static void facultyCreateQuestion(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, Runnable caller) throws SQLException {
+    public static void facultyTACreateQuestion(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, Runnable caller) throws SQLException {
         System.out.println("\nCreate New Question\n");
 
         // Step A: Question ID
@@ -135,7 +135,7 @@ public class Question {
         cin.nextLine();
 
         // Display menu options
-        System.out.println("\n1. Save\n2. Cancel\n3. Landing Page");
+        System.out.println("\n1. Save\n2. Cancel");
         int choice = cin.nextInt();
         cin.nextLine();
 
@@ -146,9 +146,6 @@ public class Question {
                 break;
             case 2:
                 caller.run();
-                break;
-            case 3:
-                displayAdminLandingPage();
                 break;
             default:
                 System.out.println("Invalid choice. Please try again.");
