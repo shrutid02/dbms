@@ -123,6 +123,7 @@ public class Section {
     }
 
     public static void facultyModifySection(int textbook_id, String chapter_id, Runnable caller) throws SQLException {
+        cin = new Scanner(System.in);
         System.out.println("\nModify Section\n");
         ;
         System.out.println("C. Enter Section Number");
@@ -148,16 +149,16 @@ public class Section {
             case 3:
                 ContentBlock.newContentBlock(textbook_id, chapter_id, section_id, () -> {
                     try {
-                        modifySection(textbook_id, chapter_id, caller);
+                        facultyModifySection(textbook_id, chapter_id, caller);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                 });
                 break;
             case 4:
-                ContentBlock.modifyContentBlock(textbook_id, chapter_id, section_id, () -> {
+                ContentBlock.facultyModifyContentBlock(textbook_id, chapter_id, section_id, () -> {
                     try {
-                        modifySection(textbook_id, chapter_id, caller);
+                        facultyModifySection(textbook_id, chapter_id, caller);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }

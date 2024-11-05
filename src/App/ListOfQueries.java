@@ -38,4 +38,34 @@ public class ListOfQueries {
             throw new RuntimeException(e);
         }
     }
+
+    public static void query3() {
+        String sql = "{CALL ListOfQueries3()}";
+        Connection connection = App.getConnection();
+
+        try {
+            assert connection != null;
+            try (CallableStatement stmt = connection.prepareCall(sql)) {
+                ResultSet resultSet = stmt.executeQuery();
+
+                System.out.println("\nOUTPUT:");
+                if (!resultSet.isBeforeFirst()) {
+                    System.out.println("**** No results found ****");
+                } else {
+                    System.out.printf("%-15s | %-25s | %-15s%n", "Course ID", "Faculty Name", "Total Students");
+                    System.out.println("---------------------------------------------------");
+
+                    while (resultSet.next()) {
+                        String courseId = resultSet.getString("course_id");
+                        String facultyName = resultSet.getString("FacultyName");
+                        int totalStudents = resultSet.getInt("TotalStudents");
+
+                        System.out.printf("%-15s | %-25s | %-15d%n", courseId, facultyName, totalStudents);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
