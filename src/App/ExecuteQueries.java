@@ -36,6 +36,8 @@ public class ExecuteQueries {
                 displayListOfQueries();
                 break;
             case 2:
+                ListOfQueries.query2();
+                displayListOfQueries();
                 break;
             case 3:
                 ListOfQueries.query3();
@@ -46,8 +48,12 @@ public class ExecuteQueries {
                 displayListOfQueries();
                 break;
             case 5:
+                ListOfQueries.query5();
+                displayListOfQueries();
                 break;
             case 6:
+                ListOfQueries.query6();
+                displayListOfQueries();
                 break;
             case 7:
                 ListOfQueries.query7();
