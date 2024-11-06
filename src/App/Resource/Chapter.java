@@ -17,6 +17,7 @@ public class Chapter {
 
     public static void addChapter(int textbook_id, Runnable caller) throws SQLException {
         System.out.println("\nAdd New Chapter\n");
+        cin = new Scanner(System.in);
 
         System.out.println("A. Enter unique Chapter ID");
         String chapter_id = cin.nextLine();
@@ -54,6 +55,7 @@ public class Chapter {
         int textbook_id = getTextbookIdForCourse(courseId);
         System.out.println("\nAdd New Chapter\n");
 
+        cin = new Scanner(System.in);
         System.out.println("A. Enter unique Chapter ID");
         String chapter_id = cin.nextLine();
         System.out.println("B. Enter Chapter title");
@@ -87,6 +89,7 @@ public class Chapter {
         int textbook_id = getTextbookIdForCourse(courseId);
         System.out.println("\nAdd New Chapter\n");
 
+        cin = new Scanner(System.in);
         System.out.println("A. Enter unique Chapter ID");
         String chapter_id = cin.nextLine();
         System.out.println("B. Enter Chapter title");
@@ -146,6 +149,7 @@ public class Chapter {
     public static void facultyModifyChapter(String courseId, Runnable caller) throws SQLException {
         int textbook_id = getTextbookIdForCourse(courseId);
         System.out.println("\nModify Chapter\n");
+        cin = new Scanner(System.in);
 
         System.out.println("A. Enter unique Chapter ID");
         String chapter_id = cin.nextLine();
@@ -197,6 +201,7 @@ public class Chapter {
 
     public static void modifyChapter(int textbook_id, Runnable caller) throws SQLException {
         System.out.println("\nModify Chapter\n");
+        cin = new Scanner(System.in);
 
         System.out.println("A. Enter unique Chapter ID");
         String chapter_id = cin.nextLine();
@@ -243,6 +248,8 @@ public class Chapter {
     public static void TAModifyChapter(String courseId, Runnable caller) throws SQLException {
         int textbook_id = getTextbookIdForCourse(courseId);
         System.out.println("\nModify Chapter\n");
+
+        cin = new Scanner(System.in);
 
         System.out.println("A. Enter unique Chapter ID");
         String chapter_id = cin.nextLine();
