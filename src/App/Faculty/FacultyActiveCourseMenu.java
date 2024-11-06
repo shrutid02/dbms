@@ -3,10 +3,9 @@ package App.Faculty;
 import App.App;
 import App.Resource.Chapter;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static App.Faculty.FacultyLandingPage.displayFacultyLandingPage;
@@ -131,6 +130,8 @@ public class FacultyActiveCourseMenu {
                         String message = rs.getString("message");
                         System.out.println(message);
                         System.out.println("\nGoing back to previous page...");
+
+                        if(message.contains("Enrollment approved")) checkCourseCapacity(course_id);
                     }
                 }
             } catch (SQLException e) {
@@ -142,6 +143,120 @@ public class FacultyActiveCourseMenu {
             System.out.println("Invalid choice. Please enter 1 or 2.");
         }
         //displayActiveCourseMenu();
+    }
+
+    private static void checkCourseCapacity(String courseId) {
+        int courseCapacity = getCourseCapacity(courseId);
+        int enrolledCount = getEnrolledCount(courseId);
+        System.out.printf("Current capacity: %s, Max capacity: %s%n", enrolledCount, courseCapacity);
+
+        if(enrolledCount >= courseCapacity){
+            removeAndNotifyPendingStudents(courseId);
+        }
+    }
+
+    private static void removeAndNotifyPendingStudents(String courseId) {
+        String message = "Sorry, you didn't get enrolled in course: " + courseId;
+        List<String> pendingStudents = getPendingStudentIds(courseId);
+        deletePendingEnrollments(courseId);
+
+        for(String id : pendingStudents){
+            insertNotification(id,message);
+        }
+    }
+
+    private static void insertNotification(String studentId, String message) {
+        String query = "INSERT INTO Notifications (student_id, message) VALUES (?, ?)";
+
+        try (Connection conn = App.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, studentId);
+            stmt.setString(2, message);
+
+            stmt.executeUpdate();
+
+            System.out.println("Notification sent to student: " + studentId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deletePendingEnrollments(String courseId) {
+        String query = "DELETE FROM Enrollments WHERE course_id = ? AND status = 'Pending'";
+
+        try (Connection conn = App.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, courseId);
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Deleted " + rowsAffected + " pending enrollment(s) for course " + courseId);
+            } else {
+                System.out.println("No pending enrollments found for course " + courseId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<String> getPendingStudentIds(String courseId) {
+        List<String> pendingStudentIds = new ArrayList<>(); // List to store the student_ids of pending students
+        String query = "SELECT student_id FROM Enrollments WHERE course_id = ? AND status = 'Pending'";
+
+        try (Connection conn = App.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, courseId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                pendingStudentIds.add(rs.getString("student_id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pendingStudentIds;
+    }
+
+    public static int getCourseCapacity(String courseId) {
+        int capacity = -1; // Default value if no course is found
+
+        String query = "SELECT course_capacity FROM Courses WHERE course_id = ?";
+
+        try (Connection conn = App.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, courseId);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                capacity = rs.getInt("course_capacity");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return capacity;
+    }
+
+    public static int getEnrolledCount(String courseId) {
+        int enrolledCount = 0; // Default value if no enrolled students are found
+        String query = "SELECT COUNT(*) AS enrolled_count FROM Enrollments WHERE course_id = ? AND status = 'Enrolled'";
+
+        try (Connection conn = App.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, courseId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                enrolledCount = rs.getInt("enrolled_count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return enrolledCount;
     }
 
     private static void viewStudents(String faculty_id, String course_id) throws SQLException {

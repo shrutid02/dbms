@@ -1,11 +1,7 @@
 package App.Student;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 import App.App;
 import App.DatabaseConfig;
@@ -17,7 +13,7 @@ public class StudentLandingPage {
     public static void displayStudentLandingPage(String username) throws SQLException {
         System.out.println("!!!WELCOME " + username + "!!!");
         Map<Integer, Map<String, Set<String>>> displayedData = displayTextbooksAndContents(username);
-        System.out.println("\n1.View a section\n2.View participation activity point\n3.Logout");
+        System.out.println("\n1.View a section\n2.View participation activity point\n3. View Notifications \n4.Logout");
         int choice = cin.nextInt();
 
         switch (choice) {
@@ -30,9 +26,57 @@ public class StudentLandingPage {
                 ViewActivityPoint.displayActivityPoints(username);
                 break;
             case 3:
+                String studentID = getStudentID(username);
+                readNotifications(studentID);
+                break;
+            case 4:
                 System.out.println("You have logged out successfully.");
                 App.displayHomePage();
                 break;
+        }
+    }
+
+    public static void readNotifications(String studentId) {
+        List<String> notifications = new ArrayList<>();
+        String query = "SELECT message FROM Notifications WHERE student_id = ?";
+
+        try (Connection conn = App.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, studentId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                notifications.add(rs.getString("message"));
+            }
+
+            System.out.println("Your notifications:");
+            System.out.println(notifications);
+
+            deleteNotifications(studentId);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void deleteNotifications(String studentId) {
+        String query = "DELETE FROM Notifications WHERE student_id = ?";
+
+        try (Connection conn = App.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, studentId);
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Notifications deleted for student ID: " + studentId);
+            } else {
+                System.out.println("No notifications found for student ID: " + studentId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
