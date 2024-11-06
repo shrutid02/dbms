@@ -5,12 +5,12 @@ CREATE TABLE Sections (
     title VARCHAR(255),
     hidden VARCHAR(3),
     PRIMARY KEY (textbook_id, chapter_id, section_id),
-    FOREIGN KEY (textbook_id) REFERENCES Textbook(textbook_id),
-    FOREIGN KEY (textbook_id, chapter_id) REFERENCES Chapter(textbook_id, chapter_id)
+    FOREIGN KEY (textbook_id) REFERENCES Textbook(textbook_id) ON DELETE CASCADE,
+    FOREIGN KEY (textbook_id, chapter_id) REFERENCES Chapter(textbook_id, chapter_id) ON DELETE CASCADE
 );
-DESCRIBE Sections;
 
-INSERT INTO Sections (textbook_id, chapter_id, section_id, title, hidden) VALUES
+
+INSERT INTO `Sections` (textbook_id, chapter_id, section_id, title, hidden) VALUES
 (101, 'chap01', 'Sec01', 'Database Management Systems (DBMS) Overview', 'no'),
 (101, 'chap01', 'Sec02', 'Data Models and Schemas', 'no'),
 (101, 'chap02', 'Sec01', 'Entities, Attributes, and Relationships', 'no'),
@@ -21,5 +21,3 @@ INSERT INTO Sections (textbook_id, chapter_id, section_id, title, hidden) VALUES
 (102, 'chap02', 'Sec02', 'Agile vs. Waterfall Models', 'no'),
 (103, 'chap01', 'Sec01', 'Overview of Machine Learning', 'yes'),
 (103, 'chap01', 'Sec02', 'Supervised vs Unsupervised Learning', 'no');
-
-SELECT * FROM Sections;
