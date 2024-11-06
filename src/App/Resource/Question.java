@@ -16,6 +16,7 @@ public class Question {
 
     public static void createQuestion(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, Runnable caller) throws SQLException {
         System.out.println("\nCreate New Question\n");
+        cin = new Scanner(System.in);
 
         System.out.println("Enter Question ID:");
         String question_id = cin.nextLine();
@@ -90,6 +91,7 @@ public class Question {
 
     public static void facultyTACreateQuestion(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, Runnable caller) throws SQLException {
         System.out.println("\nCreate New Question\n");
+        cin = new Scanner(System.in);
 
         // Step A: Question ID
         System.out.println("Enter Question ID:");

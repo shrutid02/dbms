@@ -22,7 +22,7 @@ public class ContentBlock {
 
     public static void newContentBlock(int textbook_id, String chapter_id, String section_id, Runnable caller) throws SQLException {
         System.out.println("\nCreate ContentBlock\n");
-
+        cin = new Scanner(System.in);
         System.out.println("A. Enter Content Block ID");
         String blockId = cin.nextLine();
 
@@ -92,6 +92,7 @@ public class ContentBlock {
 
     public static void FacultyNewContentBlock(int textbook_id, String chapter_id, String section_id, Runnable caller) throws SQLException {
         System.out.println("\nCreate ContentBlock\n");
+        cin = new Scanner(System.in);
 
         System.out.println("A. Enter Content Block ID");
         String blockId = cin.nextLine();
@@ -159,6 +160,7 @@ public class ContentBlock {
 
     public static void TANewContentBlock(int textbook_id, String chapter_id, String section_id, Runnable caller) throws SQLException {
         System.out.println("\nCreate ContentBlock\n");
+        cin = new Scanner(System.in);
 
         System.out.println("A. Enter Content Block ID");
         String blockId = cin.nextLine();
@@ -253,6 +255,8 @@ public class ContentBlock {
     public static void modifyContentBlock(int textbook_id, String chapter_id, String section_id, Runnable caller) throws SQLException {
         System.out.println("\nModify Content Block\n");
 
+        cin = new Scanner(System.in);
+
         System.out.println("A. Content Block ID");
         String blockId = cin.nextLine();
 
@@ -263,7 +267,7 @@ public class ContentBlock {
 
         System.out.println("\n1.Add Text\n2.Add Picture\n3.Add Activity\n4.Go Back\n5.Landing Page");
         int choice = cin.nextInt();
-
+        cin = new Scanner(System.in);
         switch (choice) {
             case 1:
                 System.out.println("Enter Text");

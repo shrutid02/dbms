@@ -16,7 +16,7 @@ public class Activity {
     static Scanner cin = new Scanner(System.in);
 
     public static void createActivity(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, Runnable caller) throws SQLException {
-
+        cin = new Scanner(System.in);
         System.out.println("\n1.Add Question\n2.Go Back\n3.Landing Page");
         int choice = cin.nextInt();
         cin.nextLine();
@@ -44,7 +44,7 @@ public class Activity {
     }
 
     public static void FacultyTACreateActivity(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, Runnable caller) throws SQLException {
-
+        cin = new Scanner(System.in);
         System.out.println("\n1.Add Question\n2.Go Back");
         int choice = cin.nextInt();
         cin.nextLine();

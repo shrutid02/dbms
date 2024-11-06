@@ -13,6 +13,7 @@ public class Section {
 
     public static void createSection(int textbookId, String chapterId, Runnable caller) throws SQLException {
         System.out.println("\nCreate Section\n");
+        cin = new Scanner(System.in);
 
         System.out.println("A. Enter Section Number");
         String sectionId = cin.nextLine();
@@ -48,6 +49,7 @@ public class Section {
 
     public static void FacultyCreateSection(int textbookId, String chapterId, Runnable caller) throws SQLException {
         System.out.println("\nCreate Section\n");
+        cin = new Scanner(System.in);
 
         System.out.println("A. Enter Section Number");
         String sectionId = cin.nextLine();
@@ -80,6 +82,7 @@ public class Section {
 
     public static void TACreateSection(int textbookId, String chapterId, Runnable caller) throws SQLException {
         System.out.println("\nCreate Section\n");
+        cin = new Scanner(System.in);
 
         System.out.println("A. Enter Section Number");
         String sectionId = cin.nextLine();
@@ -138,6 +141,7 @@ public class Section {
 
     public static void modifySection(int textbookId, String chapterId, Runnable caller) throws SQLException {
         System.out.println("\nModify Section\n");
+        cin = new Scanner(System.in);
 
         System.out.println("A. Enter unique Textbook ID");
         int textbook_id = cin.nextInt();
@@ -237,6 +241,7 @@ public class Section {
 
     public static void TAModifySection(int textbook_id, String chapter_id, Runnable caller) throws SQLException {
         System.out.println("\nModify Section\n");
+        cin = new Scanner(System.in);
 
 //        System.out.println("A. Enter unique Textbook ID");
 //        int textbook_id = cin.nextInt();
