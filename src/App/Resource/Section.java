@@ -21,7 +21,6 @@ public class Section {
         saveSection(textbookId, chapterId, sectionId,title);
 
         System.out.println("\n1.Add New Content Block\n2.Go Back\n3.Landing Page");
-        if(!caller.toString().contains("TA") && !caller.toString().contains("Faculty")) System.out.println("4.Landing Page");
 
         int choice = cin.nextInt();
 

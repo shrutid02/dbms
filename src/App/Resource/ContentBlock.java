@@ -230,7 +230,7 @@ public class ContentBlock {
                 caller.run();
                 break;
             case 5:
-                if(caller.toString().contains("TA")) displayTALandingPage(gbTAId);
+                if(gbTAId != null) displayTALandingPage(gbTAId);
                 else displayAdminLandingPage();
                 break;
             default:

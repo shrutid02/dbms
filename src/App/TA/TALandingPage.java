@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class TALandingPage {
     static Scanner cin = new Scanner(System.in);
-    public static String gbTAId;
+    public static String gbTAId = null;
 
     public static void displayTALandingPage(String ta_id) throws SQLException {
         gbTAId = ta_id;
@@ -30,6 +30,7 @@ public class TALandingPage {
                 break;
             case 4:
                 System.out.println("You have logged out successfully.");
+                gbTAId = null;
                 App.displayHomePage();
                 break;
             default:

@@ -24,8 +24,7 @@ public class Chapter {
         String title = cin.nextLine();
         saveChapter(chapter_id, title, textbook_id, "no");
 
-        System.out.println("\n1.Add New Section\n2.Go Back");
-        if(!caller.toString().contains("TA") && !caller.toString().contains("Faculty")) System.out.println("3.Landing Page");
+        System.out.println("\n1.Add New Section\n2.Go Back\n3.Landing Page");
 
         int choice = cin.nextInt();
 
