@@ -46,6 +46,38 @@ public class Section {
         }
     }
 
+    public static void FacultyCreateSection(int textbookId, String chapterId, Runnable caller) throws SQLException {
+        System.out.println("\nCreate Section\n");
+
+        System.out.println("A. Enter Section Number");
+        String sectionId = cin.nextLine();
+        System.out.println("B. Enter Section Title");
+        String title = cin.nextLine();
+        saveSection(textbookId, chapterId, sectionId,title);
+
+        System.out.println("\n1.Add New Content Block\n2.Go Back");
+
+        int choice = cin.nextInt();
+
+        switch (choice) {
+            case 1:
+                ContentBlock.FacultyNewContentBlock(textbookId, chapterId, sectionId, () -> {
+                    try {
+                        FacultyCreateSection(textbookId, chapterId, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 2:
+                caller.run();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
     public static void TACreateSection(int textbookId, String chapterId, Runnable caller) throws SQLException {
         System.out.println("\nCreate Section\n");
 
@@ -156,7 +188,7 @@ public class Section {
     public static void facultyModifySection(int textbook_id, String chapter_id, Runnable caller) throws SQLException {
         cin = new Scanner(System.in);
         System.out.println("\nModify Section\n");
-        ;
+
         System.out.println("C. Enter Section Number");
         String section_id = cin.nextLine();
 
@@ -178,7 +210,7 @@ public class Section {
                 facultyModifySection(textbook_id,chapter_id,caller);
                 break;
             case 3:
-                ContentBlock.newContentBlock(textbook_id, chapter_id, section_id, () -> {
+                ContentBlock.FacultyNewContentBlock(textbook_id, chapter_id, section_id, () -> {
                     try {
                         facultyModifySection(textbook_id, chapter_id, caller);
                     } catch (SQLException e) {

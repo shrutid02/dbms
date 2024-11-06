@@ -50,6 +50,39 @@ public class Chapter {
         }
     }
 
+    public static void FacultyAddChapter(String courseId, Runnable caller) throws SQLException {
+        int textbook_id = getTextbookIdForCourse(courseId);
+        System.out.println("\nAdd New Chapter\n");
+
+        System.out.println("A. Enter unique Chapter ID");
+        String chapter_id = cin.nextLine();
+        System.out.println("B. Enter Chapter title");
+        String title = cin.nextLine();
+        saveChapter(chapter_id, title, textbook_id, "no");
+
+        System.out.println("\n1.Add New Section\n2.Go Back");
+
+        int choice = cin.nextInt();
+
+        switch (choice) {
+            case 1:
+                Section.FacultyCreateSection(textbook_id, chapter_id, () -> {
+                    try {
+                        FacultyAddChapter(courseId, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 2:
+                caller.run();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
     public static void TAAddChapter(String courseId, Runnable caller) throws SQLException {
         int textbook_id = getTextbookIdForCourse(courseId);
         System.out.println("\nAdd New Chapter\n");
@@ -76,9 +109,6 @@ public class Chapter {
                 break;
             case 2:
                 caller.run();
-                break;
-            case 3:
-                displayAdminLandingPage();
                 break;
             default:
                 System.out.println("Invalid choice. Please try again.");
@@ -138,7 +168,7 @@ public class Chapter {
                 caller.run();
                 break;
             case 3:
-                Section.createSection(textbook_id, chapter_id, () -> {
+                Section.FacultyCreateSection(textbook_id, chapter_id, () -> {
                     try {
                         facultyModifyChapter(courseId, caller);
                     } catch (SQLException e) {

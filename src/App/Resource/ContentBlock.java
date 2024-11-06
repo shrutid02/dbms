@@ -90,6 +90,73 @@ public class ContentBlock {
         }
     }
 
+    public static void FacultyNewContentBlock(int textbook_id, String chapter_id, String section_id, Runnable caller) throws SQLException {
+        System.out.println("\nCreate ContentBlock\n");
+
+        System.out.println("A. Enter Content Block ID");
+        String blockId = cin.nextLine();
+
+        System.out.println("\n1.Add Text\n2.Add Picture\n3.Add Activity\n4.Hide Activity\n5.Go Back");
+        int choice = cin.nextInt();
+        cin.nextLine();
+
+        switch (choice) {
+            case 1:
+                System.out.println("Enter Text");
+                String text = cin.nextLine();
+                System.out.println("\n1.Add\n2.Go Back");
+                int choice2 = cin.nextInt();
+                switch (choice2) {
+                    case 1:
+                        saveContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, text, "no");
+                        break;
+                    case 2:
+                        caller.run();
+                        break;
+                }
+                break;
+            case 2:
+                System.out.println("Enter Picture");
+                String picture = cin.nextLine();
+                System.out.println("\n1.Add\n2.Go Back");
+                int choice3 = cin.nextInt();
+                switch (choice3) {
+                    case 1:
+                        saveContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, picture, "no");
+                        break;
+                    case 2:
+                        caller.run();
+                        break;
+                }
+                break;
+            case 3:
+                System.out.println("Enter Unique Activity ID");
+                String activity_id = cin.nextLine();
+                saveContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.activity, activity_id, "no");
+                Activity.saveActivity(textbook_id, chapter_id, section_id, blockId, activity_id, "no");
+                Activity.FacultyTACreateActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
+                    try {
+                        FacultyNewContentBlock(textbook_id, chapter_id, section_id, caller);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            case 4:
+                System.out.println("Enter Activity ID");
+                String hide_activity_id = cin.nextLine();
+                saveContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.activity, hide_activity_id, "no");
+                Activity.hideActivity(textbook_id, chapter_id, section_id, blockId, hide_activity_id);
+                break;
+            case 5:
+                caller.run();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
     public static void TANewContentBlock(int textbook_id, String chapter_id, String section_id, Runnable caller) throws SQLException {
         System.out.println("\nCreate ContentBlock\n");
 
@@ -113,9 +180,6 @@ public class ContentBlock {
                     case 2:
                         caller.run();
                         break;
-                    case 3:
-                        displayAdminLandingPage();
-                        break;
                 }
                 break;
             case 2:
@@ -130,9 +194,6 @@ public class ContentBlock {
                     case 2:
                         caller.run();
                         break;
-                    case 3:
-                        displayAdminLandingPage();
-                        break;
                 }
                 break;
             case 3:
@@ -140,7 +201,7 @@ public class ContentBlock {
                 String activity_id = cin.nextLine();
                 saveContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.activity, activity_id, "no");
                 Activity.saveActivity(textbook_id, chapter_id, section_id, blockId, activity_id, "no");
-                Activity.TACreateActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
+                Activity.FacultyTACreateActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
                     try {
                         TANewContentBlock(textbook_id, chapter_id, section_id, caller);
                     } catch (SQLException e) {
@@ -307,9 +368,9 @@ public class ContentBlock {
                 System.out.println("Enter Activity ID");
                 String activity_id = cin.nextLine();
                 updateContentBlock(textbook_id, chapter_id, section_id,  blockId, ContentType.picture, activity_id, "no");
-                Activity.createActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
+                Activity.FacultyTACreateActivity(textbook_id, chapter_id, section_id, blockId, activity_id, () -> {
                     try {
-                        newContentBlock(textbook_id, chapter_id, section_id, caller);
+                        facultyModifyContentBlock(textbook_id, chapter_id, section_id, caller);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }

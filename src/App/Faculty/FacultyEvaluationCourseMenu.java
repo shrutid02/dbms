@@ -18,7 +18,7 @@ public class FacultyEvaluationCourseMenu {
 
         switch (choice) {
             case 1:
-                Chapter.addChapter(course_id,() -> {
+                Chapter.FacultyAddChapter(course_id,() -> {
                     try {
                         displayEvaluationCourseMenu(faculty_id,course_id);
                     } catch (SQLException e) {

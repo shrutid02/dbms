@@ -43,7 +43,7 @@ public class Activity {
         }
     }
 
-    public static void TACreateActivity(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, Runnable caller) throws SQLException {
+    public static void FacultyTACreateActivity(int textbook_id, String chapter_id, String section_id, String block_id, String unique_activity_id, Runnable caller) throws SQLException {
 
         System.out.println("\n1.Add Question\n2.Go Back");
         int choice = cin.nextInt();
@@ -53,7 +53,7 @@ public class Activity {
             case 1:
                 Question.facultyTACreateQuestion(textbook_id, chapter_id, section_id, block_id, unique_activity_id, () -> {
                     try {
-                        TACreateActivity(textbook_id, chapter_id, section_id, block_id, unique_activity_id, caller);
+                        FacultyTACreateActivity(textbook_id, chapter_id, section_id, block_id, unique_activity_id, caller);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }

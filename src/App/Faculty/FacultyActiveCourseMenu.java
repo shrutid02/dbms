@@ -41,7 +41,7 @@ public class FacultyActiveCourseMenu {
                 displayActiveCourseMenu(faculty_id, course_id);
                 break;
             case 4:
-                Chapter.addChapter(course_id,() -> {
+                Chapter.FacultyAddChapter(course_id,() -> {
                     try {
                         displayActiveCourseMenu(faculty_id,course_id);
                     } catch (SQLException e) {
