@@ -158,6 +158,7 @@ public class Section {
 
         System.out.println("\n1.Add New Content Block\n2.Modify Content Block\n3.Go Back\n4.Landing Page");
         int choice = cin.nextInt();
+        cin = new Scanner(System.in);
 
         switch (choice) {
             case 1:
@@ -203,6 +204,7 @@ public class Section {
 
         System.out.println("\n1.Hide section \n2.Delete Section \n3.Add New Content Block\n4.Modify Content Block\n5.Go Back");
         int choice = cin.nextInt();
+        cin = new Scanner(System.in);
 
         switch (choice) {
             case 1:
@@ -263,7 +265,7 @@ public class Section {
 
         System.out.println("\n1.Add New Content Block\n2.Modify Content Block\n3.Delete Content Block\n4.Hide Content Block\n5.Go Back");
         int choice = cin.nextInt();
-
+        cin = new Scanner(System.in);
         switch (choice) {
             case 1:
                 ContentBlock.TANewContentBlock(textbook_id, chapter_id, section_id, () -> {
