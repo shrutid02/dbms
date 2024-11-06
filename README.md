@@ -32,6 +32,7 @@ This project is an implementation of an E-Learning Application modeled after pla
 #### Database Setup  
 1. **Create Database Schema**: Run `schema.sql` in MySQL to create the required tables (e.g., `Courses`, `Enrollments`).
 2. **Stored Procedures**: Run `procedures.sql` to create stored procedures such as `ApproveEnrollment`.
+3. In DatabaseConfig.java file, update **DB_URL, DB_USER, DB_PASSWORD** fields according to your MySQL server.
 
 #### Java Compilation  
 1. Navigate to the `src` directory.
