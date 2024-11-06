@@ -16,13 +16,14 @@ public class FacultyActiveCourseMenu {
 
     public static void displayActiveCourseMenu(String faculty_id, String course_id) throws SQLException {
         System.out.println("\n*** Enter choice (1-7): ");
-        System.out.println("1. View Worklist");
-        System.out.println("2. Approve Enrollment");
-        System.out.println("3. View Students");
-        System.out.println("4. Add New Chapter");
-        System.out.println("5. Modify Chapters");
-        System.out.println("6. Add TA");
-        System.out.println("7. Go Back");
+        System.out.println("""
+                1. View Worklist
+                2. Approve Enrollment
+                3. View Students
+                4. Add New Chapter
+                5. Modify Chapters
+                6. Adda TA
+                7. Go Back""");
 
         int choice = cin.nextInt();
 
@@ -111,8 +112,7 @@ public class FacultyActiveCourseMenu {
         System.out.print("Enter Student ID: ");
         String student_id = cin.next();
 
-        System.out.println("\n1. Save");
-        System.out.println("2. Cancel");
+        System.out.println("\n1. Save\n2. Cancel");
         System.out.print("Enter choice (1-2): ");
         int choice = cin.nextInt();
 

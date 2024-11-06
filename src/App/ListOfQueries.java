@@ -103,4 +103,31 @@ public class ListOfQueries {
             throw new RuntimeException(e);
         }
     }
+
+    public static void query4() {
+        String sql = "{CALL ListOfQueries4()}";
+        Connection connection = App.getConnection();
+
+        try {
+            assert connection != null;
+            try (CallableStatement stmt = connection.prepareCall(sql)) {
+                ResultSet resultSet = stmt.executeQuery();
+
+                System.out.println("\nOUTPUT:");
+                System.out.printf("%-15s | %-15s%n", "Course ID", "Total Waiting");
+                System.out.println("-----------------------------");
+
+                if (resultSet.next()) {
+                    String courseId = resultSet.getString("course_id");
+                    int totalWaiting = resultSet.getInt("TotalWaitingList");
+
+                    System.out.printf("%-15s | %-15d%n", courseId, totalWaiting);
+                } else {
+                    System.out.println("No waiting list entries found.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

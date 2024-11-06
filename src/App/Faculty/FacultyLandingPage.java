@@ -13,7 +13,17 @@ public class FacultyLandingPage {
     static Scanner cin = new Scanner(System.in);
 
     public static void displayFacultyLandingPage(String faculty_id) throws SQLException {
-        System.out.println("\n1. Go to Active Course\n2. Go to Evaluation Course\n3. View Courses\n4. Change Password\n5. Logout");
+        System.out.println("""
+                
+                1. Go to Active Course\
+                
+                2. Go to Evaluation Course\
+                
+                3. View Courses\
+                
+                4. Change Password\
+                
+                5. Logout""");
         int choice = cin.nextInt();
 
         switch (choice) {

@@ -42,6 +42,8 @@ public class ExecuteQueries {
                 displayListOfQueries();
                 break;
             case 4:
+                ListOfQueries.query4();
+                displayListOfQueries();
                 break;
             case 5:
                 break;
