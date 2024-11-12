@@ -39,6 +39,7 @@ public class ContentBlock {
                 switch (choice2) {
                     case 1:
                         saveContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, text, "no");
+                        caller.run();
                         break;
                     case 2:
                         caller.run();
@@ -56,6 +57,7 @@ public class ContentBlock {
                 switch (choice3) {
                     case 1:
                         saveContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, picture, "no");
+                        caller.run();
                         break;
                     case 2:
                         caller.run();
@@ -110,6 +112,7 @@ public class ContentBlock {
                 switch (choice2) {
                     case 1:
                         saveContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, text, "no");
+                        caller.run();
                         break;
                     case 2:
                         caller.run();
@@ -124,6 +127,7 @@ public class ContentBlock {
                 switch (choice3) {
                     case 1:
                         saveContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, picture, "no");
+                        caller.run();
                         break;
                     case 2:
                         caller.run();
@@ -178,6 +182,7 @@ public class ContentBlock {
                 switch (choice2) {
                     case 1:
                         saveContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, text, "no");
+                        caller.run();
                         break;
                     case 2:
                         caller.run();
@@ -192,6 +197,7 @@ public class ContentBlock {
                 switch (choice3) {
                     case 1:
                         saveContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, picture, "no");
+                        caller.run();
                         break;
                     case 2:
                         caller.run();
@@ -273,11 +279,13 @@ public class ContentBlock {
                 System.out.println("Enter Text");
                 String text = cin.nextLine();
                 updateContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, text, "no");
+                caller.run();
                 break;
             case 2:
                 System.out.println("Enter Picture");
                 String picture = cin.nextLine();
                 updateContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.picture, picture, "no");
+                caller.run();
                 break;
             case 3:
                 System.out.println("Enter Activity ID");
@@ -336,7 +344,10 @@ public class ContentBlock {
                 choice = cin.nextInt();
 
                 if(choice == 2) caller.run();
-                else updateContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, text, "no");
+                else {
+                    updateContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.text, text, "no");
+                    caller.run();
+                }
                 break;
             case 4:
                 System.out.println("Enter Picture");
@@ -345,7 +356,9 @@ public class ContentBlock {
                 System.out.println("\n1. Add \n2. Go Back");
                 choice = cin.nextInt();
 
-                if(choice == 1) updateContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.picture, picture, "no");
+                if(choice == 1) {
+                    updateContentBlock(textbook_id, chapter_id, section_id, blockId, ContentType.picture, picture, "no");
+                }
                 caller.run();
                 break;
             case 5:
