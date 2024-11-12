@@ -254,7 +254,7 @@ public class ContentBlock {
                 System.out.printf("New content block inserted successfully!%n");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not insert: " + e.getMessage());
         }
     }
 
@@ -429,7 +429,7 @@ public class ContentBlock {
                 System.out.println("No matching content block found to update. Enter valid Content Block ID");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not update: " + e.getMessage());
         }
     }
 
@@ -451,7 +451,7 @@ public class ContentBlock {
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not select: " + e.getMessage());
             return false;
         }
     }
@@ -481,7 +481,7 @@ public class ContentBlock {
                 System.out.println("No matching block found to update.");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not hide: " + e.getMessage());
         }
     }
 
@@ -510,7 +510,7 @@ public class ContentBlock {
                 System.out.println("No matching content block found to delete.");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not delete: " + e.getMessage());
         }
     }
 }

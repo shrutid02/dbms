@@ -135,7 +135,7 @@ public class Section {
                 System.out.printf("New section inserted in %d textbook, %s chapter successfully!%n", textbookId, chapterId);
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not insert: " + e.getMessage());
         }
     }
 
@@ -347,7 +347,7 @@ public class Section {
                 System.out.println("No matching section found to update.");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not update: " + e.getMessage());
         }
     }
 
@@ -375,7 +375,7 @@ public class Section {
                 System.out.println("No matching section found to update.");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not delete: " + e.getMessage());
         }
     }
 }

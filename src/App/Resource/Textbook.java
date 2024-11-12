@@ -61,7 +61,7 @@ public class Textbook {
                 System.out.println("New textbook inserted successfully!");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not insert: " + e.getMessage());
         }
     }
 
@@ -121,7 +121,7 @@ public class Textbook {
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not select: " + e.getMessage());
             return false;
         }
     }

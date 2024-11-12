@@ -185,7 +185,7 @@ public class Question {
                 System.out.printf("New question saved successfully!%n");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not insert: " + e.getMessage());
         }
     }
 
@@ -221,7 +221,7 @@ public class Question {
                 System.out.printf("New question saved successfully!%n");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not insert: " + e.getMessage());
         }
     }
 

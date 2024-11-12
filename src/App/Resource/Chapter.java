@@ -141,8 +141,7 @@ public class Chapter {
                 System.out.println("New Chapter added successfully!");
             }
         } catch (SQLException e) {
-            System.out.println("Failure");
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not insert: " + e.getMessage());
         }
     }
 
@@ -306,7 +305,7 @@ public class Chapter {
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not select: " + e.getMessage());
             return false;
         }
     }
@@ -351,7 +350,7 @@ public class Chapter {
                 System.out.println("No matching chapter found to update.");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not update: " + e.getMessage());
         }
     }
 
@@ -378,7 +377,7 @@ public class Chapter {
                 System.out.println("No matching chapter found to delete.");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not delete: " + e.getMessage());
         }
     }
 }

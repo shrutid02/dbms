@@ -90,7 +90,7 @@ public class Activity {
                 System.out.printf("New activity inserted successfully!%n");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not insert: " + e.getMessage());
         }
     }
 
@@ -114,7 +114,7 @@ public class Activity {
                 System.out.println("No matching activity found to hide.");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not update: " + e.getMessage());
         }
     }
 
@@ -138,7 +138,7 @@ public class Activity {
                 System.out.println("No matching activity found to delete.");
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
+            System.out.println("Did not delete: " + e.getMessage());
         }
     }
 }
